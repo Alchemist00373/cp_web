@@ -1,0 +1,305 @@
+:root {
+  --bg: #f5e5c3;
+  --card: #fffaf0;
+  --accent: #4b2c20;
+  --muted: #7a5e47;
+}
+
+/* ===== Base Styles ===== */
+body {
+  background: url('/images/parchment-bg.jpg') center/cover no-repeat fixed;
+  font-family: "Cinzel", "Georgia", serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ===== Forum Header ===== */
+header.forum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+header.forum-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ===== New Post Section ===== */
+.new-post {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  margin-bottom: 18px;
+  border: 1px solid rgba(75, 44, 32, 0.3);
+}
+
+/* Inputs */
+.input-full {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #e6d7c5;
+}
+
+.label-block {
+  margin-top: 8px;
+  display: block;
+}
+
+.new-post textarea {
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e6d7c5;
+}
+
+/* Buttons */
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #5a2e1e;
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 2px solid #67533a;
+  color: #5a4634;
+}
+
+.btn.ghost:hover {
+  background: #5a4634;
+  color: white;
+}
+
+.form-actions,
+.new-post .row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* ===== Posts ===== */
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.post-card {
+  background: var(--card);
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid rgba(75, 44, 32, 0.3);
+}
+
+.post-meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.post-title {
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+
+.post-body {
+  margin: 0;
+  white-space: pre-wrap;
+  color: #382a22;
+}
+
+.post-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.post-actions button {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* ===== Comments ===== */
+.comments {
+  display: none;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e6d7c5;
+}
+
+.comments.show {
+  display: block;
+}
+
+.comment {
+  background: #f8f5f1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 6px;
+  border-left: 3px solid #8b4513;
+}
+
+.comment strong {
+  color: #444;
+}
+
+.comment-text {
+  margin: 0.25rem 0;
+  color: var(--text-dark);
+}
+
+.comment small {
+  color: #777;
+  font-size: 0.8rem;
+}
+
+.comment-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e6d7c5;
+}
+
+/* Comment placeholder */
+.comments .no-comments {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+/* ===== Utility ===== */
+.hidden {
+  display: none !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 720px) {
+  .post-card {
+    grid-template-columns: 1fr;
+  }
+
+  header.forum-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+
+/* Toasts */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+.toast {
+  background: var(--accent);
+  color: #fffaf0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-top: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: #4b9e4b; }
+.toast.error { background: #c24b4b; }
+.toast.info { background: #4b2c20; }
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9000;
+}
+.modal-overlay.hidden { display: none; }
+.modal {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+.modal input, .modal textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e6d7c5;
+}
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}

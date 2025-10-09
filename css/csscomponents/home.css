@@ -1,0 +1,199 @@
+/* upper text css */
+.statement {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+    padding: 40px 20px;
+
+}
+
+.upper-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Top and Bottom Paragraphs */
+.statement .ptop,
+.statement .pbot {
+    font-size: 22px;
+    max-width: 450px;
+    line-height: 1;
+}
+
+/* Main Heading */
+.Paragraph {
+    font-size: 32px;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-top: 2px solid #222831;
+    border-bottom: 2px solid #222831;
+    padding: 10px 0;
+    min-width: 300px;
+    width: 750px;
+    margin: 5px 0;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* middle design css */
+
+.middle-design {
+    margin-top: 20px;
+    margin-bottom: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    flex-direction: column;
+    position: relative;
+}
+
+.backgrounds {
+    width: 100%;
+    max-height: 900px;
+    background: rgba(0, 0, 0, 0.585);
+    border: 2px solid #0000005b;
+    backdrop-filter: blur(3px);
+    display: flex;                /* NEW: centers the content inside */
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.middle-text {
+    color: #EEEEEEEE;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.middle-text h2 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.middle-text .m{
+    margin-top: 20px;
+}
+
+.character {
+    display: flex;
+    justify-content: center;      
+    align-items: center;          
+    flex-wrap: wrap;              
+    gap: 80px;                   
+}
+
+.character div {
+    text-align: center;
+}
+
+.character img {
+    width: 180px;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.character img:hover {
+    transform: scale(1.05);
+}
+
+.character h3 {
+    color: #EEEEEE;   
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+/* lower text css */
+.lower-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.3rem;
+    font-weight: 300;
+    text-align: center;
+    color: #EEEEEE;
+    padding: 10px 20px;
+    max-width: 2000px;
+    margin-bottom: 30px;
+}
+
+/* download button */
+.dl {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+/* Main button */
+.dl button {
+    background: linear-gradient(135deg, #00ADB5, #08d1db);
+    color: #EEEEEE;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 48px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.35s ease;
+    box-shadow: 0 0 20px rgba(0, 173, 181, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icon animation */
+.dl button i {
+    font-size: 1.5rem;
+    transition: transform 0.35s ease;
+}
+
+/* Subtle animated shine overlay */
+.dl button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-25deg);
+    transition: 0.5s;
+}
+
+.dl button:hover::before {
+    left: 125%;
+}
+
+/* Hover effects */
+.dl button:hover {
+    background: linear-gradient(135deg, #08d1db, #00ADB5);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 25px rgba(0, 173, 181, 0.7), 0 0 50px rgba(0, 173, 181, 0.4);
+}
+
+.dl button:hover i {
+    transform: translateY(3px);
+}
+
+/* Active click effect */
+.dl button:active {
+    transform: scale(0.97);
+    box-shadow: 0 0 12px rgba(0, 173, 181, 0.5);
+}
+
