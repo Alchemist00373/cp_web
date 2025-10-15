@@ -59,7 +59,7 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
+    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".") - 2) {
         alert("Please enter a valid email address.");
         return;
     }
@@ -80,12 +80,12 @@ form.addEventListener("submit", async (e) => {
             displayName: username,
             email: email,
             role: "user",
-            photoURL: "/images/slide3.gif",
+            photoURL: "../images/slide3.gif",
             createdAt: new Date().toISOString()
         });
 
         alert("Sign-up successful! Redirecting to homepage...");
-        window.location.href = "/index.html";
+        window.location.href = "../index.html";
 
     } catch (error) {
         console.error("Error signing up:", error);

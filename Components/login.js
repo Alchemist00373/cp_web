@@ -41,7 +41,7 @@ if (form) {
       alert(`Welcome back, ${user.displayName || "Adventurer"}!`);
       
       //Redirect after successful login
-      window.location.href = "/html/profile.html";
+      window.location.href = "../html/profile.html";
 
     } catch (error) {
       console.error("Login Error:", error);

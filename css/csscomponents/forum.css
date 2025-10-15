@@ -5,12 +5,6 @@
   --muted: #7a5e47;
 }
 
-/* ===== Base Styles ===== */
-body {
-  background: url('/images/parchment-bg.jpg') center/cover no-repeat fixed;
-  font-family: "Cinzel", "Georgia", serif;
-}
-
 .container {
   max-width: 1000px;
   margin: 0 auto;
