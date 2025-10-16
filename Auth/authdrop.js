@@ -37,6 +37,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // Logged in
     authButtons.style.display = "none";
+    authButtons.hidden = true;
     profileDropdown.hidden = false;
 
     try {
