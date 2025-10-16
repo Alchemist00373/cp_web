@@ -46,7 +46,6 @@ onAuthStateChanged(auth, async (user) => {
       if (userDoc.exists()) {
         const data = userDoc.data();
         profilePic.src = data.photoURL || "";
-        profileName.textContent = data.displayName || "Adventurer";
       } else {
         // fallback
         profilePic.src = "";
