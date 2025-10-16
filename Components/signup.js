@@ -80,7 +80,7 @@ form.addEventListener("submit", async (e) => {
             displayName: username,
             email: email,
             role: "user",
-            photoURL: "../images/slide3.gif",
+            photoURL: "../cp_web/images/slide3.gif",
             createdAt: new Date().toISOString()
         });
 
