@@ -79,7 +79,7 @@ profileBtn?.addEventListener("click", () => {
 // === Logout ===
 logoutBtn?.addEventListener("click", async () => {
   await signOut(auth);
-  window.location.href = "../html/login.html";
+  window.location.href = "../../html/login.html";
 });
 
 // === Optional: close dropdown when clicking outside ===
