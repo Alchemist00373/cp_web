@@ -77,7 +77,7 @@ form.addEventListener("submit", async (e) => {
         });
 
         alert("Sign-up successful! Redirecting to homepage...");
-        window.location.href = "../index.html";
+        window.location.href = "../html/home.html";
 
     } catch (error) {
         console.error("Error signing up:", error);
