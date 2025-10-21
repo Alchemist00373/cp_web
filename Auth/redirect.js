@@ -4,4 +4,4 @@
 setTimeout(() => {
   // ✅ Redirect to home page (adjust path if needed)
   window.location.href = "../html/home.html";
-}, 2000);
+}, 2100);
