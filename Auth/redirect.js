@@ -1,6 +1,6 @@
 setTimeout(() => {
   try {
-    window.location.href = "/html/home.html";
+    window.location.href = "/cp_web/html/home.html";
   } catch (err) {
     console.error("Redirect failed:", err);
   }
