@@ -4,4 +4,4 @@ setTimeout(() => {
   } catch (err) {
     console.error("Redirect failed:", err);
   }
-}, 5000);
+}, 10000);
