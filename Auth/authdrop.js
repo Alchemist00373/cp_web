@@ -11,15 +11,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // === Firebase Config (same everywhere) ===
-const firebaseConfig = {
-  apiKey: "AIzaSyDk4vGXwPsWzR0SLzs-qxpsen3Ukzb0oUk",
-  authDomain: "thousands-shore.firebaseapp.com",
-  projectId: "thousands-shore",
-  storageBucket: "thousands-shore.firebasestorage.app",
-  messagingSenderId: "692828584348",
-  appId: "1:692828584348:web:deb793b3b30992536d3059",
-  measurementId: "G-HB89ZEE82P"
-};
+import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
+
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
