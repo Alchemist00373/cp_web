@@ -1,33 +1,7 @@
-// routeGuard.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-const restrictedForLoggedIn = ["login.html", "sign-up.html"];
-const currentPath = window.location.pathname.toLowerCase();
-
-if (restrictedForLoggedIn.some(page => currentPath.endsWith(page))) {
-  // Loader UI
-  const loader = document.createElement("div");
-  loader.id = "authLoader";
-  loader.innerHTML = `
-    <div class="loader-box">
-      <div class="loader-circle"></div>
-      <p class="loader-text">Preparing your adventure...</p>
-    </div>
-  `;
-  document.body.appendChild(loader);
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      loader.querySelector(".loader-text").textContent = "Redirecting to home...";
-      setTimeout(() => window.location.replace("../html/home.html"), 1000);
-    } else {
-      loader.classList.add("fade-out");
-      setTimeout(() => loader.remove(), 600);
-    }
-  });
-}
+setTimeout(() => {
+  try {
+    window.location.href = "../html/home.html";
+  } catch (err) {
+    console.error("Redirect failed:", err);
+  }
+}, 5000);
