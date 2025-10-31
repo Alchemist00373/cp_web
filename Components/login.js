@@ -1,14 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { 
-  getAuth, signInWithEmailAndPassword , sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { auth } from "../Firebaseconfig/firebasecon.js";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail
+} from "firebase/auth";
 
-// ✅ Firebase Config
-import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
 
-// ✅ Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
 // ✅ Login Form Handling
 const form = document.getElementById("SignInForm");

@@ -1,22 +1,13 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+// ✅ Import initialized Firebase services
+import { auth, db } from "../Firebaseconfig/firebasecon.js";
 import {
-  getAuth,
   onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "firebase/auth";
 import {
-  getFirestore,
   doc,
   getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// === Firebase Config (same everywhere) ===
-import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
-
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+} from "firebase/firestore";
 
 // === Header elements ===
 const authButtons = document.getElementById("authButtons");

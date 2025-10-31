@@ -1,10 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { auth, db } from "../Firebaseconfig/firebasecon.js"; 
 import {
-  getAuth,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "firebase/auth";
 import {
-  getFirestore,
   collection,
   addDoc,
   deleteDoc,
@@ -15,14 +13,7 @@ import {
   serverTimestamp,
   getDocs,
   updateDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// === Firebase Config ===
-import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+} from "firebase/firestore";
 
 // === Toast ===
 function showToast(message, type = "info") {

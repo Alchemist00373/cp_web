@@ -1,9 +1,6 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// ✅ Import initialized Firebase services
+import { auth } from "../Firebaseconfig/firebasecon.js";
+import { onAuthStateChanged } from "firebase/auth";
 
 const restrictedForLoggedIn = ["login.html", "sign-up.html"];
 const currentPath = window.location.pathname.toLowerCase();
