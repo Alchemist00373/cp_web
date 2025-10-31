@@ -11,15 +11,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ✅ Your Firebase Config (same as profile.js)
-const firebaseConfig = {
-    apiKey: "AIzaSyDk4vGXwPsWzR0SLzs-qxpsen3Ukzb0oUk",
-    authDomain: "thousands-shore.firebaseapp.com",
-    projectId: "thousands-shore",
-    storageBucket: "thousands-shore.firebasestorage.app",
-    messagingSenderId: "692828584348",
-    appId: "1:692828584348:web:deb793b3b30992536d3059",
-    measurementId: "G-HB89ZEE82P"
-};
+import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -59,7 +51,7 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
+    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".") - 2) {
         alert("Please enter a valid email address.");
         return;
     }
@@ -80,12 +72,12 @@ form.addEventListener("submit", async (e) => {
             displayName: username,
             email: email,
             role: "user",
-            photoURL: "/images/slide3.gif",
+            photoURL: "../images/slide3.gif",
             createdAt: new Date().toISOString()
         });
 
         alert("Sign-up successful! Redirecting to homepage...");
-        window.location.href = "/index.html";
+        window.location.href = "../html/home.html";
 
     } catch (error) {
         console.error("Error signing up:", error);

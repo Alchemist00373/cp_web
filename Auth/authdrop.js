@@ -11,15 +11,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // === Firebase Config (same everywhere) ===
-const firebaseConfig = {
-  apiKey: "AIzaSyDk4vGXwPsWzR0SLzs-qxpsen3Ukzb0oUk",
-  authDomain: "thousands-shore.firebaseapp.com",
-  projectId: "thousands-shore",
-  storageBucket: "thousands-shore.firebasestorage.app",
-  messagingSenderId: "692828584348",
-  appId: "1:692828584348:web:deb793b3b30992536d3059",
-  measurementId: "G-HB89ZEE82P"
-};
+import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
+
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -37,6 +31,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // Logged in
     authButtons.style.display = "none";
+    authButtons.hidden
     profileDropdown.hidden = false;
 
     try {
@@ -45,7 +40,6 @@ onAuthStateChanged(auth, async (user) => {
       if (userDoc.exists()) {
         const data = userDoc.data();
         profilePic.src = data.photoURL || "";
-        profileName.textContent = data.displayName || "Adventurer";
       } else {
         // fallback
         profilePic.src = "";
@@ -79,7 +73,7 @@ profileBtn?.addEventListener("click", () => {
 // === Logout ===
 logoutBtn?.addEventListener("click", async () => {
   await signOut(auth);
-  window.location.href = "/html/login.html";
+  window.location.href = "../html/login.html";
 });
 
 // === Optional: close dropdown when clicking outside ===

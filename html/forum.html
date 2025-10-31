@@ -1,25 +1,26 @@
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Community Forum</title>
-  <link rel="icon" type="image/png" href="/images/fav.png" />
+  <title>Community Forum - Thousand Shores</title>
+  <link rel="icon" type="image/png" href="../images/fav.png" />
 
   <!-- Bootstrap Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 
   <!-- CSS Files -->
-  <link rel="stylesheet" href="/css/background.css" />
-  <link rel="stylesheet" href="/css/header.css" />
-  <link rel="stylesheet" href="/css/footer.css" />
-  <link rel="stylesheet" href="/css/csscomponents/forum.css" />
+  <link rel="stylesheet" href="../css/background.css" />
+  <link rel="stylesheet" href="../css/header.css" />
+  <link rel="stylesheet" href="../css/footer.css" />
+  <link rel="stylesheet" href="../css/csscomponents/forum.css" />
+  <link rel="stylesheet" href="../css/csscomponents/loader.css">
+  
 
   <!-- JS -->
-  <script defer type="module" src="/Auth/authdrop.js"></script>
-  <script defer type="module" src="/Components/forum.js"></script>
+  <script defer type="module" src="../Auth/authdrop.js"></script>
+  <script defer type="module" src="../Components/forum.js"></script>
+  <script type="module" src="../Auth/route.js" defer></script>
 </head>
 
 <body>
@@ -28,32 +29,32 @@
     <nav>
       <div class="background">
         <div class="logo">
-          <img src="/images/lg1.jpg" alt="Logo" />
+          <img src="../images/lg1.jpg" alt="Logo" />
           <span>Thousand Shores</span>
         </div>
 
         <div class="nav-links">
           <ul>
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/html/about.html">About</a></li>
-            <li><a class="active" href="/html/forum.html">Forum</a></li>
+            <li><a href="../html/home.html"">Home</a></li>
+            <li><a href="../html/about.html">About</a></li>
+            <li><a class="active" href="../html/forum.html">Forum</a></li>
           </ul>
         </div>
 
         <!-- Auth Buttons -->
         <div class="auth-buttons" id="authButtons">
-          <button onclick="location.href='/html/login.html'">Login</button>
-          <button onclick="location.href='/html/sign-up.html'">Sign Up</button>
+          <button onclick="location.href='../html/login.html'">Login</button>
+          <button onclick="location.href='../html/sign-up.html'">Sign Up</button>
         </div>
 
         <!-- Profile Dropdown -->
         <div class="profile-dropdown" id="profileDropdown" hidden>
           <button class="profile-btn" id="profileBtn">
             <img id="profilePic" alt="Profile" class="avatar" />
-            <span id="profileName">User</span>
+            <!-- <span id="profileName">User</span> -->
           </button>
           <div class="dropdown-menu" id="dropdownMenu">
-            <a href="/html/profile.html">Profile</a>
+            <a href="../html/profile.html">Profile</a>
             <button id="logoutBtn">Logout</button>
           </div>
         </div>
@@ -65,13 +66,16 @@
   <div class="container">
     <header class="forum-header">
       <h1>Community Forum</h1>
+
       <div class="controls">
+
         <input id="search" type="search" placeholder="Search posts..." aria-label="Search posts" />
-        <select id="sortSelect" title="Sort posts">
+        <!--  <select id="sortSelect" title="Sort posts">
           <option value="recent">Most recent</option>
           <option value="popular">Most popular</option>
-        </select>
-        <button id="newPostToggle" class="btn ghost">New Post</button>
+        </select>-->
+
+        <button id="newPostToggle" class="btn ghost add-post">Create Discussion</button>
       </div>
     </header>
 
@@ -82,11 +86,8 @@
         <input id="postTitle" name="postTitle" type="text" placeholder="Post title" required class="input-full" />
 
         <label for="postBody" class="label-block">Content</label>
-        <textarea
-          id="postBody"
-          name="postBody"
-          placeholder="Share your strategy, ask about history, or post screenshots..."
-        ></textarea>
+        <textarea id="postBody" name="postBody"
+          placeholder="Share your strategy, ask about history, or post screenshots..."></textarea>
 
         <div class="row form-actions">
           <button type="button" id="cancelNew" class="btn ghost">Cancel</button>
@@ -98,12 +99,12 @@
     <!-- Posts -->
     <section id="postsList" class="posts" aria-live="polite"></section>
 
-    <!-- Pagination -->
+    <!-- Pagination
     <nav class="pagination" aria-label="Forum pagination">
       <button class="pill" id="prevPage">Prev</button>
       <div class="pill" id="pageInfo">Page 1</div>
       <button class="pill" id="nextPage">Next</button>
-    </nav>
+    </nav> -->
   </div>
 
   <!-- Post Template -->
@@ -144,8 +145,12 @@
     <div class="footer-container">
       <div class="contact-info">
         <h3>Contact Us</h3>
-        <a href=""><p><i class="bi bi-envelope-at-fill"></i> : thousandshoresgmail.com</p></a>
-        <a href=""><p><i class="bi bi-facebook"></i> : thousandshores</p></a>
+        <a href="">
+          <p><i class="bi bi-envelope-at-fill"></i> : thousandshoresgmail.com</p>
+        </a>
+        <a href="">
+          <p><i class="bi bi-facebook"></i> : thousandshores</p>
+        </a>
       </div>
 
       <div>
@@ -162,9 +167,9 @@
         <h3>Quick Links</h3>
         <div class="quick-links">
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="/html/forum.html">Forum</a></li>
-            <li><a href="/html/aboutUs.html">About</a></li>
+            <li><a href="../html/home.html">Home</a></li>
+            <li><a href="../html/forum.html">Forum</a></li>
+            <li><a href="../html/about.html">About</a></li>
           </ul>
         </div>
       </div>
@@ -175,33 +180,34 @@
   </footer>
 
 
-<!-- Toast -->
-<div id="toastContainer" class="toast-container"></div>
+  <!-- Toast -->
+  <div id="toastContainer" class="toast-container"></div>
 
-<!-- Confirm Modal -->
-<div id="modalOverlay" class="modal-overlay hidden">
-  <div class="modal">
-    <p id="modalMessage"></p>
-    <div class="modal-actions">
-      <button id="modalCancel" class="btn ghost">Cancel</button>
-      <button id="modalConfirm" class="btn">Confirm</button>
+  <!-- Confirm Modal -->
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <p id="modalMessage"></p>
+      <div class="modal-actions">
+        <button id="modalCancel" class="btn ghost">Cancel</button>
+        <button id="modalConfirm" class="btn">Confirm</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Edit Modal -->
-<div id="editModal" class="modal-overlay hidden">
-  <div class="modal">
-    <h3 id="editModalTitle">Edit Post</h3>
-    <input id="editTitle" type="text" placeholder="Title" class="input-full" />
-    <textarea id="editBody" placeholder="Content" class="input-full"></textarea>
-    <div class="modal-actions">
-      <button id="editCancel" class="btn ghost">Cancel</button>
-      <button id="editSave" class="btn">Save</button>
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h3 id="editModalTitle">Edit Post</h3>
+      <input id="editTitle" type="text" placeholder="Title" class="input-full" />
+      <textarea id="editBody" placeholder="Content" class="input-full"></textarea>
+      <div class="modal-actions">
+        <button id="editCancel" class="btn ghost">Cancel</button>
+        <button id="editSave" class="btn">Save</button>
+      </div>
     </div>
   </div>
-</div>
 
 
 </body>
+
 </html>
