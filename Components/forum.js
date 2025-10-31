@@ -181,7 +181,7 @@ function initializeForum() {
 function renderPosts(list) {
   postsList.innerHTML = "";
   if (!list.length) {
-    postsList.innerHTML = `<p style="color:var(--muted)">No posts yet — be the first to post!</p>`;
+    postsList.innerHTML = `<p style="color:var(--muted)">No posts yet!</p>`;
     return;
   }
 
@@ -324,3 +324,5 @@ function renderPosts(list) {
             );
         renderPosts(filtered);
     });
+
+    
