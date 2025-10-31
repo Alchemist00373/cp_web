@@ -1,9 +1,43 @@
 import { defineConfig } from "vite";
-import { resolve } from "path";
+import { resolve, basename } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+function copyStaticFoldersPlugin() {
+  return {
+    name: "copy-static-folders",
+    closeBundle() {
+      const staticFolders = [
+        resolve(__dirname, "images"),
+        resolve(__dirname, "css"),
+        resolve(__dirname, "Auth"),
+        resolve(__dirname, "Components"),
+        resolve(__dirname, "html"),
+        resolve(__dirname, "Firebaseconfig"),
+      ];
+
+      const distDir = resolve(__dirname, "dist");
+
+      staticFolders.forEach(srcDir => {
+        if (!fs.existsSync(srcDir)) {
+          console.warn(`⚠️ Source folder not found: ${srcDir}`);
+          return;
+        }
+
+        const destDir = resolve(distDir, basename(srcDir));
+        fs.mkdirSync(destDir, { recursive: true });
+        fs.cpSync(srcDir, destDir, { recursive: true });
+        console.log(`✅ Copied ${srcDir} → ${destDir}`);
+      });
+    }
+  };
+}
+
 export default defineConfig({
-  base: "./", // ✅ keeps all paths relative
+  base: "./",
   build: {
     outDir: "dist",
     rollupOptions: {
@@ -18,25 +52,7 @@ export default defineConfig({
       },
     },
   },
-  plugins: [
-    {
-      name: "copy-static-folders",
-      closeBundle() {
-        const foldersToCopy = ["Auth", "Firebaseconfig", "Components", "css", "images"];
-        for (const folder of foldersToCopy) {
-          const src = resolve(__dirname, folder);
-          const dest = resolve(__dirname, "dist", folder);
-          if (fs.existsSync(src)) {
-            fs.mkdirSync(dest, { recursive: true });
-            fs.cpSync(src, dest, { recursive: true });
-            console.log(`✅ Copied ${folder} → dist/${folder}`);
-          } else {
-            console.warn(`⚠️ Folder not found: ${folder}`);
-          }
-        }
-      },
-    },
-  ],
+  plugins: [copyStaticFoldersPlugin()],
   server: {
     open: true,
   },
