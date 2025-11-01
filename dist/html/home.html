@@ -5,21 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Thousand Shores</title>
-    <link rel="icon" type="image/png" href="../images/fav.png">
+    <link rel="icon" type="image/png" href="../assets/fav-CclYvrCg.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-    <!-- Link to external CSS file (relative paths for GitHub Pages) -->
-    <link rel="stylesheet" href="../css/background.css">
-    <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/csscomponents/home.css">
-    <link rel="stylesheet" href="../css/csscomponents/loader.css">
+    <!-- Link to external CSS file (relative paths for GitHub Pages) -->
 
-    <!-- Js components (relative) -->
-    <script defer type="module" src="../Auth/authdrop.js"></script>
-    <script type="module" src="../Auth/route.js" defer></script>
+    <!-- Js components (relative) -->
+  <script type="module" crossorigin src="../assets/loader-BS98NflY.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script type="module" crossorigin src="../assets/route-C9ybX5ra.js"></script>
+  <script type="module" crossorigin src="../assets/authdrop-2eGXcD4h.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script type="module" crossorigin src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <link rel="stylesheet" crossorigin href="../assets/loader-CxwxklGl.css">
+  <link rel="stylesheet" crossorigin href="../assets/authdrop-DRo0mVMw.css">
+  <link rel="stylesheet" crossorigin href="../assets/home-Dsk4u5pP.css">
 </head>
 
 <body>
@@ -29,7 +36,7 @@
             <div class="background">
                 <!-- Logo -->
                 <div class="logo">
-                    <img src="../images/lg1.jpg" alt="Logo">
+                    <img src="../assets/lg1-CrbMR_JU.jpg" alt="Logo">
                     <span>Thousand Shores</span>
                 </div>
 
@@ -81,14 +88,14 @@
 
                 <div class="character">
                     <div>
-                        <img src="../images/lapulapu.png" alt="Character 1">
+                        <img src="data:image/png;base64,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" alt="Character 1">
                         <h3>Lapu Lapu</h3>
                     </div>
 
                     <h2>OR</h2>
 
                     <div>
-                        <img src="../images/magellan.png" alt="Character 2">
+                        <img src="data:image/png;base64,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" alt="Character 2">
                         <h3>Magellan</h3>
                     </div>
 
