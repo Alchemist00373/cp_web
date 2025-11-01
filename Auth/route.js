@@ -1,5 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
 
 const app = initializeApp(firebaseConfig);
@@ -9,7 +9,6 @@ const restrictedForLoggedIn = ["login.html", "sign-up.html"];
 const currentPath = window.location.pathname.toLowerCase();
 
 if (restrictedForLoggedIn.some(page => currentPath.endsWith(page))) {
-  // Create loader element
   const loader = document.createElement("div");
   loader.id = "authLoader";
   loader.innerHTML = `
@@ -20,7 +19,6 @@ if (restrictedForLoggedIn.some(page => currentPath.endsWith(page))) {
   `;
   document.body.appendChild(loader);
 
-  // Auth check
   onAuthStateChanged(auth, (user) => {
     if (user) {
       loader.querySelector(".loader-message").textContent = "Loading home...";

@@ -65,8 +65,10 @@ node_modules/
 # dotenv environment variables file
 .env
 .env.production
-node_modules
-dist
+node_modules/
+dist/
 
 # dataconnect generated files
 .dataconnect
+.env
+.env.production

@@ -39,6 +39,7 @@
     "fastest-levenshtein": "^1.0.16",
     "fdir": "^6.5.0",
     "find-up": "^4.1.0",
+    "firebase": "^12.5.0",
     "flat": "^5.0.2",
     "function-bind": "^1.1.2",
     "glob-to-regexp": "^0.4.1",
