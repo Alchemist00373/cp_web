@@ -14,12 +14,14 @@ import {
   query,
   serverTimestamp,
   getDocs,
-  updateDoc
+  updateDoc,
+  increment,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// === Firebase Config ===
 import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
 
+// === Initialize Firebase ===
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -63,7 +65,7 @@ function customConfirm(message) {
   });
 }
 
-// === Dynamic Edit Modal ===
+// === Edit Modal ===
 function openEditModal(type, title = "", body = "") {
   return new Promise((resolve) => {
     const modal = document.getElementById("editModal");
@@ -126,15 +128,20 @@ let currentUser = null;
 
 document.addEventListener("DOMContentLoaded", () => initializeForum());
 
+// === Forum Initialization ===
 function initializeForum() {
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
+
     if (user) {
       newPostToggle.style.display = "block";
     } else {
       newPostToggle.style.display = "none";
       newPostSection.hidden = true;
     }
+
+    // ✅ Start listening for posts only after we know auth state
+    setupPostListener();
   });
 
   newPostToggle.addEventListener("click", () => {
@@ -147,29 +154,49 @@ function initializeForum() {
     newPostForm.reset();
   });
 
-  newPostForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const title = document.getElementById("postTitle").value.trim();
-    const body = document.getElementById("postBody").value.trim();
-    if (!title || !body) return showToast("Please fill in both fields.", "error");
-    if (!currentUser) return showToast("You must be logged in to post.", "error");
+  newPostForm.addEventListener("submit", handleNewPost);
+}
 
-    try {
-      await addDoc(collection(db, "posts"), {
-        title,
-        body,
-        author: currentUser.displayName || currentUser.email,
-        uid: currentUser.uid,
-        createdAt: serverTimestamp()
-      });
-      newPostForm.reset();
-      newPostSection.hidden = true;
-      showToast("Post created successfully!", "success");
-    } catch {
-      showToast("Failed to create post.", "error");
-    }
-  });
+// === Add Post Function ===
+async function handleNewPost(e) {
+  e.preventDefault();
+  const title = document.getElementById("postTitle").value.trim();
+  const body = document.getElementById("postBody").value.trim();
+  if (!title || !body) return showToast("Please fill in both fields.", "error");
+  if (!currentUser) return showToast("You must be logged in to post.", "error");
 
+  try {
+    await addDoc(collection(db, "posts"), {
+      title,
+      body,
+      author: currentUser.displayName || currentUser.email,
+      uid: currentUser.uid,
+      createdAt: serverTimestamp()
+    });
+
+    const statsRef = doc(db, "userStats", currentUser.uid);
+    await updateDoc(statsRef, {
+      posts: increment(1),
+      xp: increment(10),
+      activity: increment(1)
+    }).catch(async (err) => {
+      if (err.code === "not-found") {
+        await setDoc(statsRef, { posts: 1, xp: 10, activity: 1 });
+      } else {
+        console.error("Failed to update stats:", err);
+      }
+    });
+
+    newPostForm.reset();
+    newPostSection.hidden = true;
+    showToast("Post created successfully! (+10 XP)", "success");
+  } catch {
+    showToast("Failed to create post.", "error");
+  }
+}
+
+// === Setup Post Listener (after auth known) ===
+function setupPostListener() {
   const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
   onSnapshot(q, (snapshot) => {
     const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -202,6 +229,16 @@ function renderPosts(list) {
     authorEl.textContent = p.author || "Anonymous";
     timeEl.textContent = new Date(p.createdAt?.toMillis?.() || Date.now()).toLocaleString();
 
+    // Hide Edit/Delete for non-owners or not logged in
+    if (!currentUser || p.uid !== currentUser.uid) {
+      editBtn.style.display = "none";
+      delBtn.style.display = "none";
+    } else {
+      editBtn.style.display = "inline-block";
+      delBtn.style.display = "inline-block";
+    }
+
+    // === Comments ===
     const toggleBtn = clone.querySelector(".toggle-comments");
     const commentsSection = clone.querySelector(".comments");
     const commentForm = clone.querySelector(".comment-form");
@@ -251,7 +288,12 @@ function renderPosts(list) {
           delC.addEventListener("click", async () => {
             if (await customConfirm("Delete this comment?")) {
               await deleteDoc(doc(db, "posts", p.id, "comments", docSnap.id));
-              showToast("Comment deleted.", "info");
+              const statsRef = doc(db, "userStats", currentUser.uid);
+              await updateDoc(statsRef, {
+                xp: increment(-2),
+                activity: increment(-1)
+              }).catch(() => {});
+              showToast("Comment deleted. (−2 XP)", "info");
             }
           });
         }
@@ -274,54 +316,64 @@ function renderPosts(list) {
         uid: currentUser.uid,
         createdAt: serverTimestamp()
       });
+
+      const statsRef = doc(db, "userStats", currentUser.uid);
+      await updateDoc(statsRef, {
+        xp: increment(2),
+        activity: increment(1)
+      }).catch(async (err) => {
+        if (err.code === "not-found") {
+          await setDoc(statsRef, { posts: 0, activity: 1, xp: 2 });
+        }
+      });
+
       commentInput.value = "";
-      showToast("Comment added!", "success");
+      showToast("Comment added! (+2 XP)", "success");
     });
 
-    if (currentUser && p.uid === currentUser.uid) {
-      editBtn.style.display = "inline-block";
-      delBtn.style.display = "inline-block";
+    // === Post Edit/Delete ===
+    editBtn.addEventListener("click", async () => {
+      const result = await openEditModal("post", p.title, p.body);
+      if (result) {
+        await updateDoc(doc(db, "posts", p.id), {
+          title: result.newTitle,
+          body: result.newBody
+        });
+        showToast("Post updated!", "success");
+      }
+    });
 
-      editBtn.addEventListener("click", async () => {
-        const result = await openEditModal("post", p.title, p.body);
-        if (result) {
-          await updateDoc(doc(db, "posts", p.id), {
-            title: result.newTitle,
-            body: result.newBody
-          });
-          showToast("Post updated!", "success");
-        }
-      });
+    delBtn.addEventListener("click", async () => {
+      if (await customConfirm("Delete this post and all comments?")) {
+        const commentsSnapshot = await getDocs(collection(db, "posts", p.id, "comments"));
+        await Promise.all(
+          commentsSnapshot.docs.map((c) => deleteDoc(doc(db, "posts", p.id, "comments", c.id)))
+        );
+        await deleteDoc(doc(db, "posts", p.id));
 
-      delBtn.addEventListener("click", async () => {
-        if (await customConfirm("Delete this post and all comments?")) {
-          const commentsSnapshot = await getDocs(collection(db, "posts", p.id, "comments"));
-          await Promise.all(
-            commentsSnapshot.docs.map((c) =>
-              deleteDoc(doc(db, "posts", p.id, "comments", c.id))
-            )
-          );
-          await deleteDoc(doc(db, "posts", p.id));
-          showToast("Post deleted.", "info");
-        }
-      });
-    }
+        const statsRef = doc(db, "userStats", currentUser.uid);
+        await updateDoc(statsRef, {
+          posts: increment(-1),
+          xp: increment(-10),
+          activity: increment(-1)
+        }).catch(() => {});
+
+        showToast("Post deleted. (-10 XP)", "info");
+      }
+    });
 
     postsList.appendChild(clone);
   });
 }
 
-// === Search (client-side) ===
+// === Search ===
 document.getElementById("search")?.addEventListener("input", async (e) => {
   const searchTerm = e.target.value.toLowerCase().trim();
   const snapshot = await getDocs(collection(db, "posts"));
   const filtered = snapshot.docs
     .map((doc) => ({ id: doc.id, ...doc.data() }))
     .filter((p) =>
-      (p.title + " " + p.body + " " + p.author)
-        .toLowerCase()
-        .includes(searchTerm)
+      (p.title + " " + p.body + " " + p.author).toLowerCase().includes(searchTerm)
     );
   renderPosts(filtered);
 });
-

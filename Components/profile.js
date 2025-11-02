@@ -1,27 +1,32 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { 
-  getAuth, onAuthStateChanged, updateProfile 
+import {
+  getAuth, onAuthStateChanged, updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { 
-  getFirestore, doc, setDoc, getDoc 
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { 
-  getStorage, ref, uploadBytes, getDownloadURL 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
+// === UI Elements ===
 const displayNameEl = document.getElementById("displayName");
 const displayEmailEl = document.getElementById("displayEmail");
 const profileAvatar = document.getElementById("profileAvatar");
-const avatarUpload = document.getElementById("avatarUpload");
-const uploadLabel = document.getElementById("uploadLabel");
+const avatarSelectContainer = document.getElementById("avatarSelectContainer");
+const avatarOptions = document.getElementById("avatarOptions");
 const nameInput = document.getElementById("nameInput");
 const editBtn = document.getElementById("editProfileBtn");
 const saveBtn = document.getElementById("saveProfileBtn");
@@ -35,17 +40,17 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-
   const userDoc = await getDoc(doc(db, "users", user.uid));
+
   if (userDoc.exists()) {
     const data = userDoc.data();
     displayNameEl.textContent = data.displayName || "Adventurer";
     displayEmailEl.textContent = data.email || "Unknown";
-    if (data.photoURL) profileAvatar.src = data.photoURL;
+    profileAvatar.src = data.photoURL || "../images/default.png";
   } else {
     displayNameEl.textContent = user.displayName || "Unknown Adventurer";
     displayEmailEl.textContent = user.email;
-    if (user.photoURL) profileAvatar.src = user.photoURL;
+    profileAvatar.src = "../images/default.png";
   }
 
   enableEditMode();
@@ -53,10 +58,11 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 function enableEditMode() {
-  uploadLabel.hidden = false;
   editBtn.hidden = false;
+  avatarSelectContainer.hidden = false; // show avatar selector
 }
 
+// === Edit Profile Name ===
 editBtn?.addEventListener("click", () => {
   nameInput.hidden = false;
   nameInput.value = displayNameEl.textContent;
@@ -70,10 +76,11 @@ saveBtn?.addEventListener("click", async () => {
 
   try {
     await updateProfile(currentUser, { displayName: newName });
-    await setDoc(doc(db, "users", currentUser.uid), {
-      displayName: newName,
-      email: currentUser.email,
-    }, { merge: true });
+    await setDoc(
+      doc(db, "users", currentUser.uid),
+      { displayName: newName, email: currentUser.email },
+      { merge: true }
+    );
 
     displayNameEl.textContent = newName;
     nameInput.hidden = true;
@@ -87,51 +94,75 @@ saveBtn?.addEventListener("click", async () => {
   }
 });
 
-avatarUpload?.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 2 * 1024 * 1024) {
-    alert("Please upload an image smaller than 2MB.");
-    return;
-  }
+// === Local Avatar Selection ===
+avatarOptions?.querySelectorAll(".avatar-option").forEach((img) => {
+  img.addEventListener("click", async () => {
+    const selectedAvatar = img.getAttribute("src");
 
-  try {
-    const storageRef = ref(storage, `avatars/${currentUser.uid}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
+    try {
+      // ✅ Save only in Firestore (not Auth)
+      await setDoc(
+        doc(db, "users", currentUser.uid),
+        { photoURL: selectedAvatar },
+        { merge: true }
+      );
 
-    await updateProfile(currentUser, { photoURL: url });
-    await setDoc(doc(db, "users", currentUser.uid), { photoURL: url }, { merge: true });
+      // ✅ Update profile immediately
+      profileAvatar.src = selectedAvatar;
 
-    // 🔥 Update on-page avatar
-    profileAvatar.src = url;
+      // ✅ Update dropdown avatar (if exists)
+      const dropdownAvatar = document.getElementById("profilePic");
+      if (dropdownAvatar) dropdownAvatar.src = selectedAvatar;
 
-    // 🔥 Update dropdown avatar (if present)
-    const dropdownAvatar = document.getElementById("profilePic");
-    if (dropdownAvatar) dropdownAvatar.src = url;
-
-    // 🔥 Sync to other open tabs/pages
-    localStorage.setItem("updatedAvatarURL", url);
-    setTimeout(() => localStorage.removeItem("updatedAvatarURL"), 3000);
-
-    alert("Avatar updated successfully!");
-  } catch (err) {
-    console.error(err);
-    alert("Error uploading avatar: " + err.message);
-  }
+      alert("Avatar updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Error saving avatar: " + err.message);
+    }
+  });
 });
 
-async function loadStats(uid) {
-  try {
-    const docRef = doc(db, "userStats", uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const stats = docSnap.data();
-      document.getElementById("statPosts").textContent = stats.posts || 0;
-      document.getElementById("statActivity").textContent = stats.activity || 0;
-      document.getElementById("statXP").textContent = stats.xp || 0;
-    }
-  } catch (err) {
-    console.error("Error loading stats:", err);
+// === Stats Handling ===
+async function recalculatePostCount(uid) {
+  const postsQuery = query(collection(db, "posts"), where("uid", "==", uid));
+  const postsSnap = await getDocs(postsQuery);
+  const postCount = postsSnap.size;
+
+  let commentCount = 0;
+  const allPostsSnap = await getDocs(collection(db, "posts"));
+  for (const postDoc of allPostsSnap.docs) {
+    const commentsSnap = await getDocs(collection(db, "posts", postDoc.id, "comments"));
+    commentsSnap.forEach((comment) => {
+      if (comment.data().uid === uid) commentCount++;
+    });
   }
+
+  const totalXP = postCount * 10 + commentCount * 2;
+  const totalActivity = postCount + commentCount;
+
+  const statsRef = doc(db, "userStats", uid);
+  await setDoc(
+    statsRef,
+    { posts: postCount, xp: totalXP, activity: totalActivity },
+    { merge: true }
+  );
+
+  return { postCount, totalXP, totalActivity };
+}
+
+async function loadStats(uid) {
+  const docRef = doc(db, "userStats", uid);
+  onSnapshot(docRef, async (docSnap) => {
+    const actual = await recalculatePostCount(uid);
+    if (docSnap.exists()) {
+      document.getElementById("statPosts").textContent = actual.postCount;
+      document.getElementById("statActivity").textContent = actual.totalActivity;
+      document.getElementById("statXP").textContent = actual.totalXP;
+    } else {
+      await setDoc(docRef, { posts: 0, activity: 0, xp: 0 });
+      document.getElementById("statPosts").textContent = 0;
+      document.getElementById("statActivity").textContent = 0;
+      document.getElementById("statXP").textContent = 0;
+    }
+  });
 }

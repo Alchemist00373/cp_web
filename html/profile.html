@@ -74,8 +74,14 @@
       <h2 id="displayName">Loading...</h2>
       <p id="displayEmail">Loading...</p>
 
-      <label for="avatarUpload" class="upload-label" id="uploadLabel" hidden>Change Avatar</label>
-      <input type="file" id="avatarUpload" accept="image/*" hidden>
+      <!-- Avatar Selection -->
+      <div class="avatar-select-container" id="avatarSelectContainer" hidden>
+        <p>Choose your avatar:</p>
+        <div class="avatar-options" id="avatarOptions">
+          <img src="../images/magellan.png" class="avatar-option" alt="Avatar 1">
+          <img src="../images/lapulapu.png" class="avatar-option" alt="Avatar 2">
+        </div>
+      </div>
 
       <input type="text" id="nameInput" placeholder="Enter new display name" hidden>
 
