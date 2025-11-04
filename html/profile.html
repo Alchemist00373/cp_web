@@ -25,6 +25,13 @@
 </head>
 
 <body>
+  <!-- Loader -->
+<div id="authLoader">
+  <div class="loader-wrapper">
+    <div class="spinner"></div>
+    <div class="loader-message">Loading Profile...</div>
+  </div>
+</div>
 
   <!-- Header Section -->
   <header class="main-header">
@@ -74,16 +81,7 @@
       <h2 id="displayName">Loading...</h2>
       <p id="displayEmail">Loading...</p>
 
-      <!-- Avatar Selection -->
-      <div class="avatar-select-container" id="avatarSelectContainer" hidden>
-        <p>Choose your avatar:</p>
-        <div class="avatar-options" id="avatarOptions">
-          <img src="../images/magellan.png" class="avatar-option" alt="Avatar 1">
-          <img src="../images/lapulapu.png" class="avatar-option" alt="Avatar 2">
-        </div>
-      </div>
-
-      <input type="text" id="nameInput" placeholder="Enter new display name" hidden>
+      <input type="text" id="nameInput" placeholder="Enter new display name" class="input-display" hidden>
 
       <div class="profile-actions">
         <button id="editProfileBtn" hidden>Edit Profile</button>
@@ -109,6 +107,22 @@
         </div>
       </div>
     </section>
+
+          <div class="avatar-select-container" id="avatarSelectContainer">
+        <p>Choose your avatar here:</p>
+        <div class="avatar-options" id="avatarOptions">
+          <img src="../images/avatar/av1.png" class="avatar-option" alt="Avatar 1">
+          <img src="../images/avatar/av5.png" class="avatar-option" alt="Avatar 2">
+          <img src="../images/avatar/av2.png" class="avatar-option" alt="Avatar 3">
+          <img src="../images/avatar/av6.png" class="avatar-option" alt="Avatar 4">
+          <img src="../images/avatar/av3.png" class="avatar-option" alt="Avatar 5">
+          <img src="../images/avatar/av7.png" class="avatar-option" alt="Avatar 6">
+          <img src="../images/avatar/av4.png" class="avatar-option" alt="Avatar 7">
+          <img src="../images/avatar/av8.png" class="avatar-option" alt="Avatar 8">
+          <img src="../images/slide3.gif" class="avatar-option" alt="Avatar 9">
+        </div>
+      </div>
+
   </main>
 
   <!-- Footer Section -->
@@ -119,10 +133,10 @@
       <div class="contact-info">
         <h3>Contact Us</h3>
         <a href="">
-          <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;thousandshoresgmail.com</p>
+          <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;ThousandShores122gmail.com</p>
         </a>
         <a href="">
-          <p><i class="bi bi-facebook"></i>&nbsp;:&nbsp;&nbsp;thousandshores</p>
+          <p><i class="bi bi-person-lines-fill"></i>&nbsp;:&nbsp;&nbsp;+63 938 408 8353</p>
         </a>
       </div>
       <!-- Social Media Links -->
@@ -130,7 +144,6 @@
         <h3>Follow Us</h3>
         <div class="social-icons">
           <a href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-          <a href="https://x.com/" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
           <a href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
           <a href="https://www.tiktok.com/explore" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
         </div>

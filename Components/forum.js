@@ -128,6 +128,26 @@ let currentUser = null;
 
 document.addEventListener("DOMContentLoaded", () => initializeForum());
 
+document.addEventListener("DOMContentLoaded", () => {
+  // Wait for DOM first
+  showLoader();
+  initializeForum();
+});
+
+// === Loader Functions ===
+function showLoader() {
+  const loader = document.getElementById("authLoader");
+  if (loader) loader.classList.remove("fade-out");
+}
+
+function hideLoader() {
+  const loader = document.getElementById("authLoader");
+  if (!loader) return;
+  loader.classList.add("fade-out");
+  setTimeout(() => loader.remove(), 2000); 
+}
+
+
 // === Forum Initialization ===
 function initializeForum() {
   onAuthStateChanged(auth, (user) => {
@@ -136,12 +156,11 @@ function initializeForum() {
     if (user) {
       newPostToggle.style.display = "block";
     } else {
-      newPostToggle.style.display = "none";
       newPostSection.hidden = true;
     }
 
-    // ✅ Start listening for posts only after we know auth state
     setupPostListener();
+    hideLoader(); // ✅ Hide loader once data starts streaming in
   });
 
   newPostToggle.addEventListener("click", () => {
@@ -157,7 +176,8 @@ function initializeForum() {
   newPostForm.addEventListener("submit", handleNewPost);
 }
 
-// === Add Post Function ===
+
+// === Add Post ===
 async function handleNewPost(e) {
   e.preventDefault();
   const title = document.getElementById("postTitle").value.trim();
@@ -182,8 +202,6 @@ async function handleNewPost(e) {
     }).catch(async (err) => {
       if (err.code === "not-found") {
         await setDoc(statsRef, { posts: 1, xp: 10, activity: 1 });
-      } else {
-        console.error("Failed to update stats:", err);
       }
     });
 
@@ -195,7 +213,7 @@ async function handleNewPost(e) {
   }
 }
 
-// === Setup Post Listener (after auth known) ===
+// === Firestore Listener ===
 function setupPostListener() {
   const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
   onSnapshot(q, (snapshot) => {
@@ -229,7 +247,6 @@ function renderPosts(list) {
     authorEl.textContent = p.author || "Anonymous";
     timeEl.textContent = new Date(p.createdAt?.toMillis?.() || Date.now()).toLocaleString();
 
-    // Hide Edit/Delete for non-owners or not logged in
     if (!currentUser || p.uid !== currentUser.uid) {
       editBtn.style.display = "none";
       delBtn.style.display = "none";
@@ -238,7 +255,7 @@ function renderPosts(list) {
       delBtn.style.display = "inline-block";
     }
 
-    // === Comments ===
+    // === Comments Overlay ===
     const toggleBtn = clone.querySelector(".toggle-comments");
     const commentsSection = clone.querySelector(".comments");
     const commentForm = clone.querySelector(".comment-form");
@@ -249,11 +266,22 @@ function renderPosts(list) {
       commentForm.innerHTML = `<p style="color:var(--muted);text-align:center;">🔒 Login to comment.</p>`;
     }
 
+    // Comment toggle with overlay behavior
     toggleBtn.addEventListener("click", () => {
       if (!currentUser) return showToast("Please log in to view comments.", "error");
+
+      // Close other open overlays
+      document.querySelectorAll(".comments.show").forEach(openSection => {
+        if (openSection !== commentsSection) {
+          openSection.classList.remove("show");
+        }
+      });
+
       commentsSection.classList.toggle("show");
+
     });
 
+    // === Load Comments ===
     const commentsQuery = query(collection(db, "posts", p.id, "comments"), orderBy("createdAt", "asc"));
     onSnapshot(commentsQuery, (snapshot) => {
       commentList.innerHTML = "";
@@ -299,11 +327,13 @@ function renderPosts(list) {
         }
 
         commentList.appendChild(commentDiv);
-      });
+      });a
+
       if (!snapshot.size)
         commentList.innerHTML = `<div style="color:var(--muted); font-size:.9rem;">No comments yet</div>`;
     });
 
+    // === Add Comment ===
     commentForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentUser) return showToast("Please log in to comment.", "error");
@@ -331,7 +361,7 @@ function renderPosts(list) {
       showToast("Comment added! (+2 XP)", "success");
     });
 
-    // === Post Edit/Delete ===
+    // === Edit/Delete Post ===
     editBtn.addEventListener("click", async () => {
       const result = await openEditModal("post", p.title, p.body);
       if (result) {

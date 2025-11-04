@@ -33,6 +33,23 @@ const saveBtn = document.getElementById("saveProfileBtn");
 
 let currentUser;
 
+// === Loader Control ===
+function showLoader() {
+  const loader = document.getElementById("authLoader");
+  if (loader) loader.classList.remove("fade-out");
+}
+
+function hideLoader() {
+  const loader = document.getElementById("authLoader");
+  if (!loader) return;
+  loader.classList.add("fade-out");
+  setTimeout(() => loader.remove(), 600);
+}
+
+// Show loader when the page starts
+showLoader();
+
+// === Auth State Handling ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "../html/login.html";
@@ -40,22 +57,29 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-  const userDoc = await getDoc(doc(db, "users", user.uid));
+  try {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
 
-  if (userDoc.exists()) {
-    const data = userDoc.data();
-    displayNameEl.textContent = data.displayName || "Adventurer";
-    displayEmailEl.textContent = data.email || "Unknown";
-    profileAvatar.src = data.photoURL || "../images/default.png";
-  } else {
-    displayNameEl.textContent = user.displayName || "Unknown Adventurer";
-    displayEmailEl.textContent = user.email;
-    profileAvatar.src = "../images/default.png";
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      displayNameEl.textContent = data.displayName || "Adventurer";
+      displayEmailEl.textContent = data.email || "Unknown";
+      profileAvatar.src = data.photoURL || "../images/default.png";
+    } else {
+      displayNameEl.textContent = user.displayName || "Unknown Adventurer";
+      displayEmailEl.textContent = user.email;
+      profileAvatar.src = "../images/default.png";
+    }
+
+    enableEditMode();
+    await loadStats(user.uid);
+  } catch (err) {
+    console.error("Error loading profile:", err);
+  } finally {
+    hideLoader(); // ✅ hide after profile info loads
   }
-
-  enableEditMode();
-  await loadStats(user.uid);
 });
+
 
 function enableEditMode() {
   editBtn.hidden = false;
