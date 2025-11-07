@@ -16,5 +16,5 @@ function hideLoader() {
   const loader = document.getElementById("authLoader");
   if (!loader) return;
   loader.classList.add("fade-out");
-  setTimeout(() => loader.remove(), 3000);
+  setTimeout(() => loader.remove(), 4000);
 }

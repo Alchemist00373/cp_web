@@ -24,13 +24,13 @@
 </head>
 
 <body>
-<!-- Loader -->
+  <!-- Loader -->
   <div id="authLoader">
-  <div class="loader-wrapper">
-    <div class="spinner"></div>
-    <div class="loader-message">Loading Thousand Shores Forum...</div>
+    <div class="loader-wrapper">
+      <div class="spinner"></div>
+      <div class="loader-message">Loading Thousand Shores Forum...</div>
+    </div>
   </div>
-</div>
 
   <!-- Header -->
   <header class="main-header">
@@ -43,27 +43,30 @@
 
         <div class="nav-links">
           <ul>
-            <li><a href="../html/home.html">Home</a></li>
-            <li><a href="../html/about.html">About</a></li>
-            <li><a class="active" href="../html/forum.html">Forum</a></li>
+            <li><a href="../html/home.html"><i class="bi bi-house-door"></i> Home</a></li>
+            <li><a href="../html/about.html"><i class="bi bi-info-circle"></i> About</a></li>
+            <li><a href="../html/forum.html" class="active"><i class="bi bi-chat-dots"></i> Forum</a></li>
           </ul>
         </div>
 
         <!-- Auth Buttons -->
         <div class="auth-buttons" id="authButtons">
-          <button onclick="location.href='../html/login.html'">Login</button>
-          <button onclick="location.href='../html/sign-up.html'">Sign Up</button>
+          <button onclick="location.href='../html/login.html'">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </button>
+          <button onclick="location.href='../html/sign-up.html'">
+            <i class="bi bi-person-plus"></i> Sign Up
+          </button>
         </div>
 
-        <!-- Profile Dropdown -->
+        <!-- Profile Dropdown (after login) -->
         <div class="profile-dropdown" id="profileDropdown" hidden>
           <button class="profile-btn" id="profileBtn">
-            <img id="profilePic" alt="Profile" class="avatar" />
-            <!-- <span id="profileName">User</span> -->
+            <img id="profilePic" alt="Profile" class="avatar">
           </button>
           <div class="dropdown-menu" id="dropdownMenu">
-            <a href="../html/profile.html">Profile</a>
-            <button id="logoutBtn">Logout</button>
+            <a href="../html/profile.html"><i class="bi bi-person-circle"></i> Profile</a>
+            <button id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</button>
           </div>
         </div>
       </div>
@@ -134,78 +137,78 @@
               <input type="text" class="comment-input" placeholder="Write a comment..." />
               <button type="submit" class="btn">Comment</button>
             </form>
-        </div>
         </section>
 
       </article>
     </template>
 
-    <!-- Footer -->
-    <footer>
-      <div class="footer-container">
-        <div class="contact-info">
-          <h3>Contact Us</h3>
-          <a href="">
-            <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;ThousandShores122gmail.com</p>
-          </a>
-          <a href="">
-            <p><i class="bi bi-person-lines-fill"></i>&nbsp;:&nbsp;&nbsp;+63 938 408 8353</p>
-          </a>
+  </div>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="contact-info">
+        <h3>Contact Us</h3>
+        <a href="">
+          <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;ThousandShores122gmail.com</p>
+        </a>
+        <a href="">
+          <p><i class="bi bi-person-lines-fill"></i>&nbsp;:&nbsp;&nbsp;+63 938 408 8353</p>
+        </a>
+      </div>
+      <!-- Social Media Links -->
+      <div>
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.tiktok.com/explore" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
         </div>
-        <!-- Social Media Links -->
-        <div>
-          <h3>Follow Us</h3>
-          <div class="social-icons">
-            <a href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="https://www.tiktok.com/explore" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
-          </div>
 
-        </div>
-
-        <div>
-          <h3>Quick Links</h3>
-          <div class="quick-links">
-            <ul>
-              <li><a href="../html/home.html">Home</a></li>
-              <li><a href="../html/forum.html">Forum</a></li>
-              <li><a href="../html/about.html">About</a></li>
-            </ul>
-          </div>
-        </div>
       </div>
 
-      <div class="divider"></div>
-      <p class="copyright">&copy; 2025 Capstone Team. All rights reserved.</p>
-    </footer>
-
-
-    <!-- Toast -->
-    <div id="toastContainer" class="toast-container"></div>
-
-    <!-- Confirm Modal -->
-    <div id="modalOverlay" class="modal-overlay hidden">
-      <div class="modal">
-        <p id="modalMessage"></p>
-        <div class="modal-actions">
-          <button id="modalCancel" class="btn ghost">Cancel</button>
-          <button id="modalConfirm" class="btn">Confirm</button>
+      <div>
+        <h3>Quick Links</h3>
+        <div class="quick-links">
+          <ul>
+            <li><a href="../html/home.html">Home</a></li>
+            <li><a href="../html/forum.html">Forum</a></li>
+            <li><a href="../html/about.html">About</a></li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal-overlay hidden">
-      <div class="modal">
-        <h3 id="editModalTitle">Edit Post</h3>
-        <input id="editTitle" type="text" placeholder="Title" class="input-full" />
-        <textarea id="editBody" placeholder="Content" class="input-full"></textarea>
-        <div class="modal-actions">
-          <button id="editCancel" class="btn ghost">Cancel</button>
-          <button id="editSave" class="btn">Save</button>
-        </div>
+    <div class="divider"></div>
+    <p class="copyright">&copy; 2025 Capstone Team. All rights reserved.</p>
+  </footer>
+
+
+  <!-- Toast -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Confirm Modal -->
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <p id="modalMessage"></p>
+      <div class="modal-actions">
+        <button id="modalCancel" class="btn ghost">Cancel</button>
+        <button id="modalConfirm" class="btn">Confirm</button>
       </div>
     </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h3 id="editModalTitle">Edit Post</h3>
+      <input id="editTitle" type="text" placeholder="Title" class="input-full" />
+      <textarea id="editBody" placeholder="Content" class="input-full"></textarea>
+      <div class="modal-actions">
+        <button id="editCancel" class="btn ghost">Cancel</button>
+        <button id="editSave" class="btn">Save</button>
+      </div>
+    </div>
+  </div>
   </div>
 
 </body>

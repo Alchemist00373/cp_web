@@ -15,6 +15,7 @@ import {
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+import{showToast} from"../Components/toast.js";
 import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
 
 const app = initializeApp(firebaseConfig);
@@ -96,13 +97,27 @@ editBtn?.addEventListener("click", () => {
 
 saveBtn?.addEventListener("click", async () => {
   const newName = nameInput.value.trim();
-  if (!newName) return alert("Please enter a valid name.");
+  if (!newName) return showToast("Please enter a valid name.");
+
+  // ✅ Prevent using existing display names of other users
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("displayName", "==", newName));
+  const snapshot = await getDocs(q);
+
+  // If name exists AND it's not the current user's old name
+  if (!snapshot.empty && newName !== displayNameEl.textContent) {
+    showToast(" Display name already taken. Please choose a different name.");
+    return;
+  }
 
   try {
+    // ✅ Update Firebase Auth profile
     await updateProfile(currentUser, { displayName: newName });
+
+    // ✅ Update Firestore user document
     await setDoc(
       doc(db, "users", currentUser.uid),
-      { displayName: newName, email: currentUser.email },
+      { displayName: newName, username: newName }, // keep synced
       { merge: true }
     );
 
@@ -111,12 +126,13 @@ saveBtn?.addEventListener("click", async () => {
     saveBtn.hidden = true;
     editBtn.hidden = false;
 
-    alert("Profile updated successfully!");
+    showToast("✅ Profile name updated successfully!");
   } catch (err) {
     console.error(err);
-    alert("Error updating profile: " + err.message);
+    showToast("Error updating profile: " + err.message);
   }
 });
+
 
 // === Local Avatar Selection ===
 avatarOptions?.querySelectorAll(".avatar-option").forEach((img) => {
@@ -138,55 +154,63 @@ avatarOptions?.querySelectorAll(".avatar-option").forEach((img) => {
       const dropdownAvatar = document.getElementById("profilePic");
       if (dropdownAvatar) dropdownAvatar.src = selectedAvatar;
 
-      alert("Avatar updated successfully!");
+      showToast("Avatar updated successfully!");
     } catch (err) {
       console.error(err);
-      alert("Error saving avatar: " + err.message);
+      showToast("Error saving avatar: " + err.message);
     }
   });
 });
 
-// === Stats Handling ===
-async function recalculatePostCount(uid) {
+
+// displaying profile stats
+async function calculateStats(uid) {
+  // Count posts made by user
   const postsQuery = query(collection(db, "posts"), where("uid", "==", uid));
   const postsSnap = await getDocs(postsQuery);
   const postCount = postsSnap.size;
 
-  let commentCount = 0;
-  const allPostsSnap = await getDocs(collection(db, "posts"));
-  for (const postDoc of allPostsSnap.docs) {
-    const commentsSnap = await getDocs(collection(db, "posts", postDoc.id, "comments"));
-    commentsSnap.forEach((comment) => {
-      if (comment.data().uid === uid) commentCount++;
-    });
-  }
+  // Count comments made by user
+  const commentsQuery = query(collectionGroup(db, "comments"), where("uid", "==", uid));
+  const commentsSnap = await getDocs(commentsQuery);
+  const commentCount = commentsSnap.size;
 
-  const totalXP = postCount * 10 + commentCount * 2;
-  const totalActivity = postCount + commentCount;
+  const stats = {
+    posts: postCount,
+    activity: postCount + commentCount,
+    xp: commentCount // XP is only from comments (your rule)
+  };
 
-  const statsRef = doc(db, "userStats", uid);
-  await setDoc(
-    statsRef,
-    { posts: postCount, xp: totalXP, activity: totalActivity },
-    { merge: true }
-  );
-
-  return { postCount, totalXP, totalActivity };
+  await setDoc(doc(db, "userStats", uid), stats, { merge: true });
+  return stats;
 }
 
+// Loads stats and keeps UI live-updating
 async function loadStats(uid) {
-  const docRef = doc(db, "userStats", uid);
-  onSnapshot(docRef, async (docSnap) => {
-    const actual = await recalculatePostCount(uid);
-    if (docSnap.exists()) {
-      document.getElementById("statPosts").textContent = actual.postCount;
-      document.getElementById("statActivity").textContent = actual.totalActivity;
-      document.getElementById("statXP").textContent = actual.totalXP;
-    } else {
-      await setDoc(docRef, { posts: 0, activity: 0, xp: 0 });
-      document.getElementById("statPosts").textContent = 0;
-      document.getElementById("statActivity").textContent = 0;
-      document.getElementById("statXP").textContent = 0;
-    }
+  const statsRef = doc(db, "userStats", uid);
+
+  const snap = await getDoc(statsRef);
+
+  if (!snap.exists()) {
+    // Stats do not exist yet → first time → calculate baseline
+    const newStats = await calculateStats(uid);
+    displayStats(newStats);
+  } else {
+    displayStats(snap.data());
+  }
+
+  // Real-time updates
+  onSnapshot(statsRef, (docSnap) => {
+    if (docSnap.exists()) displayStats(docSnap.data());
   });
+}
+
+// Display final stats in UI
+function displayStats(stats) {
+  document.getElementById("statPosts").textContent = stats.posts;
+  document.getElementById("statActivity").textContent = stats.activity;
+  document.getElementById("statXP").textContent = stats.xp;
+
+  // Optional: Show rank + progress bar (see below)
+  displayRank(stats.xp);
 }

@@ -13,11 +13,12 @@
 .title {
     display: flex;
     justify-content: center;
-    font-size: 30px;
+    font-size: 32px;
     margin-bottom: 20px;
     border-bottom: 2px solid black;
     border-top: 2px solid black;
     min-width: 700px;
+    padding: 8px 0;
 }
 
 .card-container {
@@ -128,6 +129,7 @@
     border-top: 2px solid black;
     min-width: 400px;
 }
+
 .b p {
     display: flex;
     justify-content: center;
@@ -209,4 +211,134 @@
 .member-card .social-icons a i:hover {
     color: #ff5733;
     transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .title {
+        display: flex;
+        min-width: 80%;
+        font-size: 16px;
+        padding: 6px 0;
+    }
+
+    .card-container {
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .card-container .object,
+    .card-container .mc,
+    .card-container .vc {
+        max-width: 90%;
+    }
+
+    .content h2 {
+        min-width: 150px;
+        font-size: 1rem;
+        margin-left:45px ;
+    }
+
+    .content p {
+        max-width: 80%;
+        font-size: .8rem;
+        text-align: justify;
+        margin: 12px 12px 0 44px;
+    }
+
+    /* Team Section */
+    .team-card {
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .b {
+        min-width: auto;
+        width: 90%;
+    }
+
+    .b h2 {
+        min-width: auto;
+        width: 60%;
+        font-size: 18px;
+    }
+
+    .b p {
+        width: 90%;
+        font-size: 18px;
+    }
+
+    .member-card {
+        min-width: 280px;
+        min-height: auto;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .about{
+        transform: scale(1);
+    }
+
+    .title {
+        display: flex;
+        max-width: 90%;
+        font-size: 14px;
+        padding: 6px 0;
+        text-align: center;
+    }
+
+    .card-container {
+        flex-direction: row;
+        max-width: 85%;
+        margin: auto;
+    }
+
+    .card-container .object,
+    .card-container .mc,
+    .card-container .vc {
+        max-width: fit-content;
+        padding: 24px;
+
+    }
+
+    .content h2 {
+        font-size: .8rem;
+        max-width: fit-content;
+        padding: 8px 24px;
+        margin: auto;
+    }
+
+    .content p {
+        font-size: .6rem;
+        max-width: 220px;
+        margin: auto;
+        margin-top: 15px;
+        
+    }
+
+    /* Team Section */
+    .team-card {
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .b {
+        min-width: auto;
+        width: 90%;
+        margin: 0;
+    }
+
+    .b h2 {
+        min-width: auto;
+        max-width: 60%;
+        font-size: 18px;
+    }
+
+    .member-card {
+        max-width: 280px;
+        min-height: auto;
+        padding: 15px;
+    }
 }

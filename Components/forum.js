@@ -126,8 +126,6 @@ const newPostForm = document.getElementById("newPostForm");
 
 let currentUser = null;
 
-document.addEventListener("DOMContentLoaded", () => initializeForum());
-
 document.addEventListener("DOMContentLoaded", () => {
   // Wait for DOM first
   showLoader();
@@ -144,7 +142,7 @@ function hideLoader() {
   const loader = document.getElementById("authLoader");
   if (!loader) return;
   loader.classList.add("fade-out");
-  setTimeout(() => loader.remove(), 2000); 
+  setTimeout(() => loader.remove(), 2000);
 }
 
 
@@ -197,17 +195,17 @@ async function handleNewPost(e) {
     const statsRef = doc(db, "userStats", currentUser.uid);
     await updateDoc(statsRef, {
       posts: increment(1),
-      xp: increment(10),
       activity: increment(1)
     }).catch(async (err) => {
       if (err.code === "not-found") {
-        await setDoc(statsRef, { posts: 1, xp: 10, activity: 1 });
+        await setDoc(statsRef, { posts: 1, activity: 1, xp: 0 });
       }
     });
 
+
     newPostForm.reset();
     newPostSection.hidden = true;
-    showToast("Post created successfully! (+10 XP)", "success");
+    showToast("Post created successfully!", "success");
   } catch {
     showToast("Failed to create post.", "error");
   }
@@ -318,16 +316,16 @@ function renderPosts(list) {
               await deleteDoc(doc(db, "posts", p.id, "comments", docSnap.id));
               const statsRef = doc(db, "userStats", currentUser.uid);
               await updateDoc(statsRef, {
-                xp: increment(-2),
+                xp: increment(-1),
                 activity: increment(-1)
-              }).catch(() => {});
-              showToast("Comment deleted. (−2 XP)", "info");
+              }).catch(() => { });
+              showToast("Comment deleted.", "info");
             }
           });
         }
 
         commentList.appendChild(commentDiv);
-      });a
+      });
 
       if (!snapshot.size)
         commentList.innerHTML = `<div style="color:var(--muted); font-size:.9rem;">No comments yet</div>`;
@@ -349,16 +347,17 @@ function renderPosts(list) {
 
       const statsRef = doc(db, "userStats", currentUser.uid);
       await updateDoc(statsRef, {
-        xp: increment(2),
-        activity: increment(1)
+        activity: increment(1),
+        xp: increment(1)
       }).catch(async (err) => {
         if (err.code === "not-found") {
-          await setDoc(statsRef, { posts: 0, activity: 1, xp: 2 });
+          await setDoc(statsRef, { posts: 0, activity: 1, xp: 1 });
         }
       });
 
+
       commentInput.value = "";
-      showToast("Comment added! (+2 XP)", "success");
+      showToast("Comment added!", "success");
     });
 
     // === Edit/Delete Post ===
@@ -375,22 +374,28 @@ function renderPosts(list) {
 
     delBtn.addEventListener("click", async () => {
       if (await customConfirm("Delete this post and all comments?")) {
+
         const commentsSnapshot = await getDocs(collection(db, "posts", p.id, "comments"));
-        await Promise.all(
-          commentsSnapshot.docs.map((c) => deleteDoc(doc(db, "posts", p.id, "comments", c.id)))
+        const commentCount = commentsSnapshot.size; 
+        const deletePromises = commentsSnapshot.docs.map(c =>
+          deleteDoc(doc(db, "posts", p.id, "comments", c.id))
         );
+        await Promise.all(deletePromises);
+
         await deleteDoc(doc(db, "posts", p.id));
 
         const statsRef = doc(db, "userStats", currentUser.uid);
         await updateDoc(statsRef, {
-          posts: increment(-1),
-          xp: increment(-10),
-          activity: increment(-1)
-        }).catch(() => {});
+          posts: increment(-1),              
+          activity: increment(-(1 + commentCount)),
+          xp: increment(-commentCount)       
+        });
 
-        showToast("Post deleted. (-10 XP)", "info");
+        showToast(`Post deleted.`, "info");
       }
     });
+
+
 
     postsList.appendChild(clone);
   });

@@ -1,5 +1,4 @@
-/* === PROFILE PAGE === */
-
+/* Profile View container*/
 .profile-container {
   display: flex;
   justify-content: center;
@@ -64,7 +63,7 @@
   text-align: center;
 }
 
-/* === AVATAR SELECTION === */
+/* === Profile selection === */
 .avatar-select-container {
   margin-top: 15px;
   text-align: center;
@@ -137,7 +136,7 @@
   transform: scale(1.03);
 }
 
-/* === PROFILE STATS === */
+/* === Profile stat === */
 .profile-stats {
   margin-top: 25px;
   background: rgba(255, 250, 240, 0.9);
@@ -174,15 +173,76 @@
   text-align: center;
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 600px) {
-  .profile-card {
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+
+  .profile-container {
     padding: 20px;
+    transform-origin: center;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transform: scale(0.7);
+  }
+
+  .profile-card {
+    max-width: 300px;
+    padding: 22px;
+  }
+
+  .avatar-select-container {
+    min-height: 350px;
+    padding: 12px;
+  }
+
+  .avatar-options {
+    gap: 22px;
+  }
+
+  .avatar-option {
+    width: 75px;
+    height: 75px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    transform-origin: center;
+    gap: 30px;
+    min-width: 370;
+    min-height: 700px;
+    transform: scale(.85)
+  }
+
+  .profile-card img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .input-display {
+    width: 75%;
   }
 
   .avatar-option {
     width: 55px;
     height: 55px;
+  }
+
+  .avatar-select-container {
+    min-height: 300px;
+    min-width: 300px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stats-grid {
+    gap: 10px;
   }
 
   .stat-value {

@@ -30,6 +30,7 @@ header.forum-header h1 {
   justify-content: center;
   align-items: center;
   display: flex;
+  color: #432216;
 
 }
 
@@ -38,8 +39,8 @@ header.forum-header h1 {
   align-items: center;
   flex-direction: row;
   margin: 8px 0;
-  background: rgb(40, 0, 0);
-  padding: 8px;
+  background: #5a2e1e;
+  padding: 6px;
   border-radius: 10px;
   min-width: 1000px;
 }
@@ -49,15 +50,18 @@ header.forum-header h1 {
   align-items: center;
   flex-direction: row;
   min-width: 200px;
+  text-align: center;
 }
 
 .input-search {
   padding: 8px;
   border-radius: 8px;
+  background: rgba(255, 250, 240, 0.97);
   border: 1px solid #e6d7c5;
-  margin-left: 12px;
+  margin-left: 15px;
   min-width: 78%;
 }
+
 
 /* ===== New Post Section ===== */
 .new-post {
@@ -105,7 +109,6 @@ header.forum-header h1 {
 }
 
 .btn.ghost.add-post {
-  border: 2px solid #67533a;
   background-color: #f5e5c3;
 }
 
@@ -349,4 +352,237 @@ header.forum-header h1 {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+
+  /* Adjust for main forum content */
+  header.forum-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .controls {
+    flex-direction: row;
+    align-items: stretch;
+    min-width: 90%;
+  }
+
+  .controls .btn {
+    justify-content: center;
+    min-width: 30%;
+    margin-left: 6px;
+    font-size: .75rem;
+  }
+
+  .input-search {
+    min-width: 65%;
+    margin-left: 15px;
+  }
+
+  #postsList {
+    grid-template-columns: repeat(1, 1fr);
+  }
+    .comments {
+    min-width: unset;
+    width: 90vw;
+    left: 50%;
+    transform: translateX(-50%) scale(0.98);
+    padding: 12px;
+    margin-top: 6px;
+  }
+
+  .comments.show {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .comment {
+    padding: 6px 8px;
+    border-left-width: 2px;
+  }
+
+  .comment-text {
+    font-size: 0.85rem;
+  }
+
+  .comment small {
+    font-size: 0.7rem;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .comment-input {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+
+  .comments .comment-list {
+    max-height: 140px;
+  }
+
+  .toast-container {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .toast.show {
+    transform: translateX(-250px);
+  }
+
+  .toast {
+    padding: 8px 14px;
+    font-size: 0.95rem;
+  }
+
+  .modal {
+    max-width: 340px;
+    padding: 18px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .comment .btn {
+    margin-right: 8px;
+  }
+
+  .comment .btn:last-child {
+    margin-right: 0px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  header.forum-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .controls {
+    flex-direction: row;
+    align-items: center;
+    min-width: 80%;
+    max-width: 50%;
+    margin: 12px 20px 0px 20px;
+  }
+
+  .controls .btn {
+    min-width: 20%;
+    margin-left: 6px;
+    font-size: .75rem;
+  }
+
+  .input-search {
+    min-width: 0;
+    margin-left: 15px;
+  }
+
+  #postsList {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .post-card {
+    padding: 12px;
+  }
+
+  .post-body {
+    font-size: 0.95rem;
+  }
+
+  .post-actions button {
+    margin-left: 6px;
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  .comments {
+    min-width: unset;
+    width: 90vw;
+    left: 50%;
+    transform: translateX(-50%) scale(0.98);
+    padding: 12px;
+    margin-top: 6px;
+  }
+
+  .comments.show {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .comment {
+    padding: 6px 8px;
+    border-left-width: 2px;
+  }
+
+  .comment-text {
+    font-size: 0.85rem;
+  }
+
+  .comment small {
+    font-size: 0.7rem;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .comment-input {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+
+  .comments .comment-list {
+    max-height: 140px;
+  }
+
+  .toast-container {
+    bottom: 12px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .toast {
+    width: auto;
+    max-width: 90vw;
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .toast.show {
+    transform: translateY(0px) translateX(5%);
+  }
+
+  /* Modal fills more of the screen */
+  .modal {
+    width: 95%;
+    max-width: 340px;
+    padding: 16px;
+  }
+
+  .modal input,
+  .modal textarea {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .comment .btn {
+    margin-right: 4px; 
+    padding: 6px 8px; 
+    font-size: 0.75rem;  
+  }
+
+  .comment .btn:last-child {
+    margin-right: 0;
+  }
 }

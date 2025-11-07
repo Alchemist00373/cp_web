@@ -20,12 +20,14 @@ if (restrictedForLoggedIn.some(page => currentPath.endsWith(page))) {
   document.body.appendChild(loader);
 
   onAuthStateChanged(auth, (user) => {
-    if (user) {
+    // ✅ Only verified users are treated as logged in
+    if (user && user.emailVerified) {
       loader.querySelector(".loader-message").textContent = "Loading home...";
-      setTimeout(() => window.location.replace("../html/home.html"), 1200);
+      setTimeout(() => window.location.replace("../html/home.html"), 1000);
     } else {
+      // Not logged in OR not verified — remove loader and stay on page
       loader.classList.add("fade-out");
-      setTimeout(() => loader.remove(), 600);
+      setTimeout(() => loader.remove(), 1000);
     }
   });
 }

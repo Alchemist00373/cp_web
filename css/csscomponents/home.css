@@ -1,40 +1,40 @@
 /* ===== Hero Text Section ===== */
 .statement {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: #000;
-  padding: 40px 20px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #000;
+    padding: 40px 20px;
 }
 
 .upper-text {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
 /* Top and Bottom Paragraphs */
 .statement .ptop,
 .statement .pbot {
-  font-size: 22px;
-  max-width: 500px;
+    font-size: 22px;
+    max-width: 500px;
 }
 
 /* Main Heading */
 .statement .Paragraph {
-  font-size: 28px;
-  text-transform: uppercase;
-  font-weight: 700;
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
-  padding: 10px 0;
-  min-width: 700px;
-  width: 100%;
-  margin: 10px 0;
-  letter-spacing: 1px;
+    font-size: 28px;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    padding: 10px 0;
+    min-width: 700px;
+    width: 100%;
+    margin: 10px 0;
+    letter-spacing: 1px;
 }
 
 
@@ -53,7 +53,7 @@
     min-height: 400px;
     background: rgba(0, 0, 0, 0.23);
     backdrop-filter: blur(3px);
-    display: flex;              
+    display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
@@ -77,10 +77,10 @@
 
 .character {
     display: flex;
-    justify-content: center;      
-    align-items: center;          
-    flex-wrap: wrap;              
-    gap: 80px;                   
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 80px;
     margin-top: 20px;
 }
 
@@ -100,7 +100,8 @@
 }
 
 .character h3 {
-    color: #FFFFFFFF;   /* matches your accent cyan */
+    color: #FFFFFFFF;
+    /* matches your accent cyan */
     margin-top: 10px;
     font-size: 20px;
 }
@@ -152,7 +153,7 @@
     left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transform: skewX(-25deg);
     transition: 0.5s;
 }
@@ -176,4 +177,81 @@
 .dl button:active {
     transform: scale(0.97);
     box-shadow: 0 0 12px rgba(0, 173, 181, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .statement .Paragraph {
+        font-size: 22px;
+        min-width: 100%;
+    }
+
+    .character {
+        gap: 40px;
+    }
+
+    .character img {
+        width: 140px;
+    }
+
+    .dl button {
+        padding: 12px 36px;
+        font-size: 1rem;
+    }
+
+    .lower-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .statement .Paragraph {
+        font-size: 13px;
+        max-width: 100%;
+        margin: 0px;
+    }
+
+    .statement .ptop,
+    .statement .pbot {
+        font-size: 14px;
+    }
+
+    .middle-design{
+        margin: 0 0 50px 0;
+    }
+
+    .character {
+        gap: 10px;
+    }
+
+    .character img {
+        max-width: 100px;
+    }
+    .character h2{
+        font-size: 14px;
+    }
+
+    .middle-text h2{
+        font-size: 14px;
+    }
+
+    .character h3{
+        font-size: 12px;
+    }
+
+    .dl button {
+        max-width: 200px;
+        padding: 10px 28px;
+        font-size: 0.6rem;
+    }
+
+    .dl button i {
+        font-size: 16px;
+    }
+
+    .lower-text {
+        font-size: 12px;
+        padding: 12px 12px;
+    }
+
 }
