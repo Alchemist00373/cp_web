@@ -3,72 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Thousand Shores/title> </title>
+    <title>Login - Thousand Shores </title>
     <link rel="icon" type="image/png" href="../images/fav.png">
-    
+
     <!-- external css -->
     <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/csscomponents/Sign-in.css">
     <link rel="stylesheet" href="../css/csscomponents/loader.css">
+    <link rel="stylesheet" href="../css/toast.css">
     <!-- Scripts -->
     <script type="module" src="../Components/login.js" defer></script>
+    <script type="module" src="../Components/toast.js"></script>
     <script type="module" src="../Auth/route.js" defer></script>
-    
+
 </head>
 
 <body>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay hidden" id="forgotModal">
+        <div class="modal">
+            <h2>Reset Password</h2>
+            <p>Enter your email to receive a reset link.</p>
+
+            <input type="email" id="forgotEmail" placeholder="Enter your email">
+
+            <div class="modal-actions">
+                <button id="closeForgotModal">Cancel</button>
+                <button id="sendForgotEmail">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="a">
+        <div class="Sign-in-section">
+
+            <div class="Sign-in-container">
+                <h1>Sign In</h1>
+
+                <form action="" id="SignInForm" class="form">
+
+                    <label for="username">Email:</label>
+                    <input type="email" id="getgmail" required placeholder="Enter your email">
+
+                    <label for="password">password:</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="getpassword" required placeholder="Enter your password">
+                        <img id="togglePassword" src="../images/open.png" class="eye-img">
+                    </div>
 
 
-    <div class="Sign-in-section">
+                    <div class="bs">
 
-        <div class="Sign-in-container">
-            <h1>Sign In</h1>
+                        <a class="f-link" id="forgot-password-link">
+                            <p>Forgot your Password?</p>
+                        </a>
+                    </div>
 
-            <form action="" id="SignInForm" class="form">
+                    <button type="submit" id="login" class="si">Login</button>
 
-                <label for="username">Email:</label>
-                <input type="email" id="getgmail" required placeholder="Enter mail">
+                </form>
 
-                <label for="password">Password:</label>
-                <input type="password" id="getpassword" required placeholder="Enter password">
+                <a class="return" href="../html/home.html">
+                    <button>Back</button>
+                </a>
 
-                <div class="bs">
-                    
-                    <a class="f-link"  id="forgot-password-link">
-                        <p>Forgot your Password?</p>
-                    </a>
+            </div>
 
-                </div>
-
-                <button type="submit" id="login" class="si">Login</button>
-
-            </form>
+            <div class="sign-up-container">
 
 
-            <a class="return" href="../html/home.html">
-                <button>Back</button>
-            </a>
+                <h1>HELLO, FRIEND!</h1>
+                <p>Welcome to the Expedition of the Thousand's Shores. Join us in our journey to learn and discover
+                    the
+                    wonders of history! Sign up now to start your adventure!</p>
+                <a href="../html/sign-up.html" class="su"> <button> Sign Up</button></a>
+
+            </div>
+
 
         </div>
 
-        <divs class="sign-up-container">
-
-
-            <h1>HELLO, FRIEND!</h1>
-            <p>Welcome to the Expedition of the Thousand's Shores. Join us in our journey to learn and discover
-                the
-                wonders of history! Sign up now to start your adventure!</p>
-            <a href="../html/sign-up.html" class="su"> <button> sign-up</button></a>
-
     </div>
-
-
-    </div>
-
 </body>
-
-
-
-
 
 </html>

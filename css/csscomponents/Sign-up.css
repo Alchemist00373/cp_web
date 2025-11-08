@@ -53,6 +53,7 @@ input {
   border: 1px solid #ccc;
   font-size: .9rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  min-width: auto;
 }
 
 .bs {
@@ -124,4 +125,168 @@ h1 {
 .sign-in-container p {
   font-size: 1.3rem;
   color: #fefefe;
+}
+
+/* Password visibility toggle styles */
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.eye-img {
+  position: absolute;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.3s;
+}
+
+.eye-img:hover {
+  opacity: 1;
+}
+
+.eye-icon:hover {
+  opacity: 1;
+}
+
+.eye-icon:hover {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+  .sign-in-section {
+    height: auto;
+    transform: scale(0.90);
+    transform-origin: center;
+    min-height: 450px;
+    min-width: 500px;
+    text-align: center;
+  }
+
+  .sign-in-container,
+  .sign-up-container {
+    padding: 35px 25px;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .si {
+    transform: none;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .return button {
+    transform: none;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+
+  }
+
+  /* Typography scale */
+  .sign-up-container h1,
+  .sign-in-container h1 {
+    font-size: 1.5rem;
+    transform: none;
+    text-align: center;
+  }
+
+  label {
+    transform: none;
+    font-size: 1rem;
+  }
+
+  input {
+    padding: 7px 10px;
+    font-size: .6em;
+    padding: 8px 12px;
+    min-width: auto;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .a {
+    transform: scale(1);
+  }
+
+  .sign-in-section {
+    min-width: 90%;
+    height: auto;
+  }
+
+  .sign-in-container,
+  .sign-up-container {
+    padding: 20px 14px;
+    gap: 8px;
+  }
+
+  .sign-up-container h1,
+  .sign-in-container h1 {
+    font-size: 1.3rem;
+  }
+
+  .sign-in-container p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  input {
+    padding: 7px 10px;
+    font-size: .45em;
+    padding: 8px 12px;
+    min-width: auto;
+  }
+
+  /* Buttons become nice and even */
+  .si {
+    width: 100%;
+    padding: 8px 0;
+    max-height: 30px;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  .su button {
+    width: 100%;
+    max-height: 30px;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 8px 20px;
+    font-size: 0.8rem;
+
+  }
+
+  .return button {
+    width: 100%;
+    padding: 8px 0;
+    max-height: 30px;
+    justify-content: center;
+    font-size: 0.8rem;
+
+    max-height: 30px;
+  }
+
+  /* Eye icon adjusts */
+  .eye-img {
+    width: 18px;
+    height: 18px;
+    right: 8px;
+  }
+
+  /* Label just aligns naturally */
+  label {
+    transform: none;
+    font-size: .9rem;
+  }
 }

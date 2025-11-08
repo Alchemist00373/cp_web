@@ -1,24 +1,29 @@
-/* === PROFILE PAGE === */
-
+/* Profile View container*/
 .profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 100px);
   padding: 40px 0;
+  background: transparent;
+  flex-direction: row;
 }
 
+/* === CARD === */
 .profile-card {
   background: rgba(255, 250, 240, 0.95);
   border: 2px solid #4b2c20;
   border-radius: 16px;
   padding: 30px;
-  max-width: 500px;
+  max-width: 480px;
   width: 90%;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   text-align: center;
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
 }
+
 
 .profile-card img {
   width: 120px;
@@ -27,27 +32,91 @@
   border: 3px solid #4b2c20;
   object-fit: cover;
   margin-bottom: 15px;
+  transition: transform 0.2s ease;
+}
+
+.profile-card img:hover {
+  transform: scale(1.05);
 }
 
 .profile-card h2 {
   margin-bottom: 5px;
   color: #3a2115;
+  font-size: 1.4rem;
 }
 
 .profile-card p {
   color: #5e4031;
   font-size: 1rem;
+  margin-bottom: 10px;
 }
 
-.upload-label {
-  display: inline-block;
-  background-color: #4b2c20;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
+.input-display {
+  width: 60%;
+  padding: 8px 12px;
   margin-top: 10px;
-  font-size: 0.9rem;
+  border: 2px solid #4b2c20;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  text-align: center;
+}
+
+/* === Profile selection === */
+.avatar-select-container {
+  margin-top: 15px;
+  text-align: center;
+  border-radius: 10px;
+  border: 2px solid #4b2c20;
+  display: flex;
+  flex-direction: column;
+  min-height: 435px;
+  padding: 12px 16px;
+  margin: 0 24px;
+  background-color: rgba(255, 250, 240, 0.95);
+}
+
+.avatar-select-container p {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #3a2115;
+  font-size: larger;
+}
+
+.avatar-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.avatar-option {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: 0.25s ease;
+  object-fit: cover;
+  background: #fff8f2;
+  border-color: #4e4000;
+}
+
+.avatar-option:hover {
+  border-color: #007bff;
+  transform: scale(1.08);
+}
+
+/* highlight selected avatar */
+.selected-avatar {
+  border-color: #f4c542;
+  box-shadow: 0 0 10px rgba(244, 197, 66, 0.6);
+  transform: scale(1.1);
+}
+
+/* === ACTION BUTTONS === */
+.profile-actions {
+  margin-top: 15px;
 }
 
 .profile-actions button {
@@ -56,22 +125,24 @@
   border: none;
   border-radius: 10px;
   padding: 8px 16px;
-  margin-top: 12px;
+  margin-top: 10px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .profile-actions button:hover {
   background: #2e150c;
+  transform: scale(1.03);
 }
 
-/* === PROFILE STATS === */
+/* === Profile stat === */
 .profile-stats {
-  margin-top: 30px;
+  margin-top: 25px;
   background: rgba(255, 250, 240, 0.9);
   border-top: 2px solid #4b2c20;
   padding-top: 15px;
+  border-radius: 10px;
 }
 
 .profile-stats h3 {
@@ -100,4 +171,81 @@
   font-weight: 700;
   color: #3a2115;
   text-align: center;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+
+  .profile-container {
+    padding: 20px;
+    transform-origin: center;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transform: scale(0.7);
+  }
+
+  .profile-card {
+    max-width: 300px;
+    padding: 22px;
+  }
+
+  .avatar-select-container {
+    min-height: 350px;
+    padding: 12px;
+  }
+
+  .avatar-options {
+    gap: 22px;
+  }
+
+  .avatar-option {
+    width: 75px;
+    height: 75px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    transform-origin: center;
+    gap: 30px;
+    min-width: 370;
+    min-height: 700px;
+    transform: scale(.85)
+  }
+
+  .profile-card img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .input-display {
+    width: 75%;
+  }
+
+  .avatar-option {
+    width: 55px;
+    height: 55px;
+  }
+
+  .avatar-select-container {
+    min-height: 300px;
+    min-width: 300px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stats-grid {
+    gap: 10px;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
 }

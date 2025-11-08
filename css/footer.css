@@ -1,119 +1,188 @@
 /* ===== Footer ===== */
 footer {
-    background-color: rgba(0, 0, 0, 0.9);
-    color: #EEEEEE;
-    padding: 20px 40px;
-    width: 100%;
-    margin-top: auto;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #EEEEEE;
+  padding: 20px 40px;
+  width: 100%;
+  margin-top: auto;
 }
 
 /* Footer container layout */
 footer .footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 30px;
-    font-size: 22px;
-    text-align: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+  font-size: 22px;
+  text-align: center;
 }
 
 /* Each column inside footer */
 footer .footer-container div {
-    flex: 1 1 250px;
-    min-width: 220px;
+  flex: 1 1 250px;
+  min-width: 220px;
 }
 
 /* Headings */
 footer h3 {
-    margin-bottom: 10px;
-    font-size: 24px;
-    color: #00ADB5;           
-    border-bottom: 2px solid #00ADB5;
-    display: inline-block;
-    padding-bottom: 3px;
-    text-align: center;
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #00ADB5;
+  border-bottom: 2px solid #00ADB5;
+  display: inline-block;
+  padding-bottom: 3px;
+  text-align: center;
 }
 
 /* Footer text & links */
 footer p,
 footer li,
 footer a {
-    font-size: 19px;
-    color: #EEEEEE;
-    text-decoration: none;
-    transition: color 0.3s ease;
+  font-size: 19px;
+  color: #EEEEEE;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .contact-info p {
-    display: flex;
-    position: relative;
-    text-align: justify;
-    left: 100px;
+  display: flex;
+  position: relative;
+  text-align: justify;
+  left: 100px;
 }
 
-.contact-info p:hover, i:hover {
-    color: #a2e7f0;
+.contact-info p:hover,
+i:hover {
+  color: #a2e7f0;
 }
 
 footer ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
 }
 
 footer ul li a:hover {
-    
-    color: #a2e7f0;
+
+  color: #a2e7f0;
 }
 
 /* Social icons */
 footer .social-icons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 8px;
 }
 
 footer .social-icons a i {
-    font-size: 25px;
-    color: #EEEEEE;
-    transition: color 0.3s ease, transform 0.2s ease;
-    cursor: pointer;
+  font-size: 25px;
+  color: #EEEEEE;
+  transition: color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
 footer .social-icons a i:hover {
-    color: #a2e7f0;
-    transform: scale(1.1);
+  color: #a2e7f0;
+  transform: scale(1.1);
 }
 
 /* Quick Links */
 .quick-links ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  justify-content: center;
 }
 
 /* Divider line */
 footer .divider {
-    margin: 15px auto;
-    width: 90%;
-    border-top: 1.5px solid #00ADB5;
+  margin: 15px auto;
+  width: 90%;
+  border-top: 1.5px solid #00ADB5;
 }
 
 /* Copyright */
 footer .copyright {
+  text-align: center;
+  font-size: 14px;
+  color: #EEEEEE;
+  margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+
+  footer .footer-container {
+    justify-content: center;
+    align-items: flex-start;
     text-align: center;
+    gap: 15px;
+    flex-direction: row;
+
+  }
+
+  footer .footer-container div {
+    max-width: 200px;
+  }
+
+  footer h3 {
+    font-size: 16px;
+  }
+
+  footer p,
+  footer li,
+  footer a {
+    font-size: 16px;
+  }
+
+  .contact-info p,
+  i {
+    left: 0;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .social-icons a,
+  i {
+    font-size: 16px;
+  }
+}
+
+/* Very Small Phones */
+@media (max-width: 380px) {
+
+  footer .footer-container div {
+    min-width: 100px;
+  }
+
+  footer h3 {
+    font-size: 16px;
+  }
+
+  footer p,
+  footer li,
+  footer a {
     font-size: 14px;
-    color: #EEEEEE;
-    margin-top: 5px;
+  }
+
+  .contact-info p
+  i {
+    left: 0;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .copyright {
+    font-size: 12px;
+  }
 }

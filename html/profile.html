@@ -16,51 +16,80 @@
   <link rel="stylesheet" href="../css/footer.css">
   <link rel="stylesheet" href="../css/csscomponents/profile.css">
   <link rel="stylesheet" href="../css/csscomponents/loader.css">
+  <link rel="stylesheet" href="../css/toast.css">
 
   <!-- Scripts -->
-  <!-- Js components -->
-  <script defer type="module" src="../Auth/authdrop.js"></script>
-  <script defer type="module" src="../Components/profile.js"></script>
-  <script type="module" src="../Auth/route.js" defer></script>
+  <script type="module" defer src="../Components/toast.js"></script>
+  <script type="module" defer src="../Auth/authdrop.js"></script>
+  <script type="module" defer src="../Components/profile.js"></script>
+  <script type="module" defer src="../Auth/route.js"></script>
+
 </head>
 
 <body>
+
+  <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-overlay hidden" id="forgotModal">
+    <div class="modal">
+      <h2>Reset Password</h2>
+      <p>Enter your email to receive a password reset link.</p>
+
+      <input type="email" id="forgotEmail" placeholder="Enter your email">
+
+      <div class="modal-actions">
+        <button id="closeForgotModal">Cancel</button>
+        <button id="sendForgotEmail">Send</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Loader -->
+  <div id="authLoader">
+    <div class="loader-wrapper">
+      <div class="spinner"></div>
+      <div class="loader-message">Loading Profile...</div>
+    </div>
+  </div>
 
   <!-- Header Section -->
   <header class="main-header">
     <nav>
       <div class="background">
-        <!-- Logo -->
-        <div class="logo" onclick="location.href='../index.html'">
-          <img src="../images/lg1.jpg" alt="Logo">
+        <div class="logo">
+          <img src="../images/lg1.jpg" alt="Logo" />
           <span>Thousand Shores</span>
         </div>
 
-        <!-- Nav Links -->
         <div class="nav-links">
           <ul>
-            <li><a href="../html/home.html">Home</a></li>
-            <li><a href="../html/about.html">About</a></li>
-            <li><a href="../html/forum.html">Forum</a></li>
+            <li><a href="../html/home.html"><i class="bi bi-house-door"></i> Home</a></li>
+            <li><a href="../html/about.html"><i class="bi bi-info-circle"></i> About</a></li>
+            <li><a href="../html/forum.html"><i class="bi bi-chat-dots"></i> Forum</a></li>
           </ul>
         </div>
 
-        <!-- Auth Buttons (before login) -->
+        <!-- Auth Buttons -->
         <div class="auth-buttons" id="authButtons">
-          <button onclick="location.href='/html/login.html'">Login</button>
-          <button onclick="location.href='/html/sign-up.html'">Sign Up</button>
+          <button onclick="location.href='../html/login.html'">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </button>
+          <button onclick="location.href='../html/sign-up.html'">
+            <i class="bi bi-person-plus"></i> Sign Up
+          </button>
         </div>
 
         <!-- Profile Dropdown (after login) -->
         <div class="profile-dropdown" id="profileDropdown" hidden>
           <button class="profile-btn" id="profileBtn">
             <img id="profilePic" alt="Profile" class="avatar">
-            <!-- <span id="profileName">User</span> -->
           </button>
-
           <div class="dropdown-menu" id="dropdownMenu">
-            <a href="profile.html">Profile</a>
-            <button id="logoutBtn">Logout</button>
+            <a href="../html/profile.html"><i class="bi bi-person-circle"></i> Profile</a>
+            <button id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</button>
           </div>
         </div>
       </div>
@@ -74,10 +103,7 @@
       <h2 id="displayName">Loading...</h2>
       <p id="displayEmail">Loading...</p>
 
-      <label for="avatarUpload" class="upload-label" id="uploadLabel" hidden>Change Avatar</label>
-      <input type="file" id="avatarUpload" accept="image/*" hidden>
-
-      <input type="text" id="nameInput" placeholder="Enter new display name" hidden>
+      <input type="text" id="nameInput" placeholder="Enter new display name" class="input-display" hidden>
 
       <div class="profile-actions">
         <button id="editProfileBtn" hidden>Edit Profile</button>
@@ -97,12 +123,28 @@
             <p id="statActivity" class="stat-value">0</p>
           </div>
           <div>
-            <p class="stat-label">XP Points</p>
+            <p class="stat-label">Comments</p>
             <p id="statXP" class="stat-value">0</p>
           </div>
         </div>
       </div>
     </section>
+
+    <div class="avatar-select-container" id="avatarSelectContainer">
+      <p>Choose your avatar here:</p>
+      <div class="avatar-options" id="avatarOptions">
+        <img src="../images/avatar/av1.png" class="avatar-option" alt="Avatar 1">
+        <img src="../images/avatar/av5.png" class="avatar-option" alt="Avatar 2">
+        <img src="../images/avatar/av2.png" class="avatar-option" alt="Avatar 3">
+        <img src="../images/avatar/av6.png" class="avatar-option" alt="Avatar 4">
+        <img src="../images/avatar/av3.png" class="avatar-option" alt="Avatar 5">
+        <img src="../images/avatar/av7.png" class="avatar-option" alt="Avatar 6">
+        <img src="../images/avatar/av4.png" class="avatar-option" alt="Avatar 7">
+        <img src="../images/avatar/av8.png" class="avatar-option" alt="Avatar 8">
+        <img src="../images/slide3.gif" class="avatar-option" alt="Avatar 9">
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer Section -->
@@ -113,10 +155,10 @@
       <div class="contact-info">
         <h3>Contact Us</h3>
         <a href="">
-          <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;thousandshoresgmail.com</p>
+          <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;ThousandShores122gmail.com</p>
         </a>
         <a href="">
-          <p><i class="bi bi-facebook"></i>&nbsp;:&nbsp;&nbsp;thousandshores</p>
+          <p><i class="bi bi-person-lines-fill"></i>&nbsp;:&nbsp;&nbsp;+63 938 408 8353</p>
         </a>
       </div>
       <!-- Social Media Links -->
@@ -124,7 +166,6 @@
         <h3>Follow Us</h3>
         <div class="social-icons">
           <a href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-          <a href="https://x.com/" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
           <a href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
           <a href="https://www.tiktok.com/explore" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
         </div>

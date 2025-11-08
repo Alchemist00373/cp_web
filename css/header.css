@@ -1,117 +1,118 @@
-/* CSS for header and slider */
-
 a {
-    text-decoration: none;
-    color: #EEEEEE;
+  text-decoration: none;
+  color: #EEEEEE;
 }
 
 ul {
-    list-style: none;
-    display: flex;
-    gap: 40px;
+  list-style: none;
+  display: flex;
+  gap: 40px;
 }
 
-/* ======== HEADER / NAV ======== */
+/*  Header nav */
 header {
-    width: 100%;
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: 1;
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 /* Background for nav */
 nav .background {
-    background-color: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 30px 50px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
 }
+
 
 /* Logo styles */
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-    left: 100px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  left: 100px;
 }
 
 .logo img {
-    width: auto;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 100%;
+  width: auto;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 100%;
 }
 
 .logo span {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #EEEEEE;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #EEEEEE;
 }
 
 /* Navigation styles */
 .nav-links {
-    align-items: center;
-    position: relative;
-    font-size: 1.2rem;
+  align-items: center;
+  position: relative;
+  font-size: 1.2rem;
 }
 
 .nav-links ul li a {
-    padding: 8px 10px;
-    font-weight: 500;
-    transition: 0.08s;
+  padding: 8px 10px;
+  font-weight: 500;
+  transition: 0.08s;
 }
 
 .nav-links ul li a:hover {
-    color: #004557;
-    background-color: #dadada;
-    border-bottom: 2px solid #00ADB5;
-    border-radius: 10px;
+  color: #004557;
+  background-color: #dadada;
+  border-bottom: 2px solid #00ADB5;
+  border-radius: 10px;
 }
+
 .nav-links a.active {
-    border-bottom: 2px solid #EEEEEE;
-    padding-bottom: 3px;
+  border-bottom: 2px solid #EEEEEE;
+  padding-bottom: 3px;
 }
 
 
 
 /* Authentication buttons */
 .auth-buttons {
-    display: flex;
-    position: relative;
-    right: 100px;
+  display: flex;
+  position: relative;
+  right: 100px;
 }
 
 .auth-buttons button {
-    background: #00ADB5;
-    color: #fff;
-    margin-left: 30px;
-    cursor: pointer;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: 0.3s;
+  background: #00ADB5;
+  color: #fff;
+  margin-left: 30px;
+  cursor: pointer;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: 0.3s;
 }
 
 .auth-buttons button:hover {
-    background: #fff;
-    color: #00ADB5;
-    cursor: pointer;
-    opacity: 0.85;
+  background: #fff;
+  color: #00ADB5;
+  cursor: pointer;
+  opacity: 0.85;
 }
 
 /* === PROFILE DROPDOWN MENU === */
 .profile-dropdown {
   position: relative;
   left: -60px;
+  z-index: 100;
 }
 
 .profile-btn {
@@ -140,7 +141,7 @@ nav .background {
   padding: 16px 0;
   display: none;
   flex-direction: column;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   z-index: 10;
 }
 
@@ -163,4 +164,155 @@ nav .background {
 
 .profile-dropdown.active .dropdown-menu {
   display: flex;
+}
+
+
+/* Responsive adjustments */
+
+
+@media (max-width: 768px) {
+
+  .logo {
+    left: 25px;
+    position: fixed;
+  }
+
+  .logo img {
+    width: auto;
+    max-height: 50px;
+    object-fit: cover;
+    border-radius: 100%;
+  }
+
+  .logo span {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #EEEEEE;
+  }
+
+  .auth-buttons {
+    right: 40px;
+    position: fixed;
+    min-width: 70px;
+    max-width: 300px;
+  }
+
+  .profile-dropdown {
+    right: 40px;
+    max-width: 10px;
+    top: -10px;
+  }
+
+  .profile-dropdown .avatar{
+    width: 55px;
+    height: auto;
+  }
+
+  .profile-dropdown .dropdown-menu{
+        right: -20px;
+  }
+
+  .nav-links {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    transition: 0.3s;
+    z-index: 100;
+    transform: translateY(45px);
+    min-width: 300px;
+    font-size: 1.1rem;
+  }
+
+  nav .background {
+    padding: 60px 0px;
+    min-width: none;
+    max-width: 100%;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .logo {
+    left: 10px;
+    position: fixed;
+    font-size: 0.75rem;
+    top: 40px;
+  }
+
+  .logo img {
+    width: auto;
+    max-height: 40px;
+    object-fit: cover;
+    border-radius: 100%;
+  }
+
+  .auth-buttons {
+    right: 10px;
+    position: fixed;
+    min-width: 40px;
+    max-width: 170px;
+  }
+
+  .auth-buttons button {
+    padding: 6px 10px;
+    font-size: 0.65rem;
+  }
+
+  .auth-buttons .bi-person-plus {
+    display: none;
+  }
+
+  .auth-buttons .bi-box-arrow-in-right {
+    display: none;
+  }
+
+  .profile-dropdown {
+    right: 20px;
+    max-width: 10px;
+    height: auto;
+    top: -15px;
+  }
+
+  .profile-dropdown .avatar {
+    width: 35px;
+    height: auto;
+  }
+
+  .profile-dropdown .dropdown-menu {
+    right: -20px;
+    top: 90%;
+  }
+
+  .dropdown-menu a,
+  .dropdown-menu button {
+    width: 100px;
+    font-size: 0.75rem;
+  }
+
+  nav .background {
+    padding: 55px 0px;
+    min-width: none;
+    max-width: 100%;
+  }
+
+  .nav-links {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    flex-direction: column;
+    transition: 0.3s;
+    z-index: 100;
+    transform: translateY(38px);
+    min-width: none;
+    font-size: .8rem;
+  }
+
+  .nav-links a.active {
+    border-bottom: none;
+  }
+
 }

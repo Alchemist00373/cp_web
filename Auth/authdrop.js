@@ -18,6 +18,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+
 // === Header elements ===
 const authButtons = document.getElementById("authButtons");
 const profileDropdown = document.getElementById("profileDropdown");

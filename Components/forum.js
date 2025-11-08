@@ -14,12 +14,14 @@ import {
   query,
   serverTimestamp,
   getDocs,
-  updateDoc
+  updateDoc,
+  increment,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// === Firebase Config ===
 import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
 
+// === Initialize Firebase ===
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -63,7 +65,7 @@ function customConfirm(message) {
   });
 }
 
-// === Dynamic Edit Modal ===
+// === Edit Modal ===
 function openEditModal(type, title = "", body = "") {
   return new Promise((resolve) => {
     const modal = document.getElementById("editModal");
@@ -124,17 +126,39 @@ const newPostForm = document.getElementById("newPostForm");
 
 let currentUser = null;
 
-document.addEventListener("DOMContentLoaded", () => initializeForum());
+document.addEventListener("DOMContentLoaded", () => {
+  // Wait for DOM first
+  showLoader();
+  initializeForum();
+});
 
+// === Loader Functions ===
+function showLoader() {
+  const loader = document.getElementById("authLoader");
+  if (loader) loader.classList.remove("fade-out");
+}
+
+function hideLoader() {
+  const loader = document.getElementById("authLoader");
+  if (!loader) return;
+  loader.classList.add("fade-out");
+  setTimeout(() => loader.remove(), 2000);
+}
+
+
+// === Forum Initialization ===
 function initializeForum() {
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
+
     if (user) {
       newPostToggle.style.display = "block";
     } else {
-      newPostToggle.style.display = "none";
       newPostSection.hidden = true;
     }
+
+    setupPostListener();
+    hideLoader(); // ✅ Hide loader once data starts streaming in
   });
 
   newPostToggle.addEventListener("click", () => {
@@ -147,29 +171,48 @@ function initializeForum() {
     newPostForm.reset();
   });
 
-  newPostForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const title = document.getElementById("postTitle").value.trim();
-    const body = document.getElementById("postBody").value.trim();
-    if (!title || !body) return showToast("Please fill in both fields.", "error");
-    if (!currentUser) return showToast("You must be logged in to post.", "error");
+  newPostForm.addEventListener("submit", handleNewPost);
+}
 
-    try {
-      await addDoc(collection(db, "posts"), {
-        title,
-        body,
-        author: currentUser.displayName || currentUser.email,
-        uid: currentUser.uid,
-        createdAt: serverTimestamp()
-      });
-      newPostForm.reset();
-      newPostSection.hidden = true;
-      showToast("Post created successfully!", "success");
-    } catch {
-      showToast("Failed to create post.", "error");
-    }
-  });
 
+// === Add Post ===
+async function handleNewPost(e) {
+  e.preventDefault();
+  const title = document.getElementById("postTitle").value.trim();
+  const body = document.getElementById("postBody").value.trim();
+  if (!title || !body) return showToast("Please fill in both fields.", "error");
+  if (!currentUser) return showToast("You must be logged in to post.", "error");
+
+  try {
+    await addDoc(collection(db, "posts"), {
+      title,
+      body,
+      author: currentUser.displayName || currentUser.email,
+      uid: currentUser.uid,
+      createdAt: serverTimestamp()
+    });
+
+    const statsRef = doc(db, "userStats", currentUser.uid);
+    await updateDoc(statsRef, {
+      posts: increment(1),
+      activity: increment(1)
+    }).catch(async (err) => {
+      if (err.code === "not-found") {
+        await setDoc(statsRef, { posts: 1, activity: 1, xp: 0 });
+      }
+    });
+
+
+    newPostForm.reset();
+    newPostSection.hidden = true;
+    showToast("Post created successfully!", "success");
+  } catch {
+    showToast("Failed to create post.", "error");
+  }
+}
+
+// === Firestore Listener ===
+function setupPostListener() {
   const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
   onSnapshot(q, (snapshot) => {
     const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -202,6 +245,15 @@ function renderPosts(list) {
     authorEl.textContent = p.author || "Anonymous";
     timeEl.textContent = new Date(p.createdAt?.toMillis?.() || Date.now()).toLocaleString();
 
+    if (!currentUser || p.uid !== currentUser.uid) {
+      editBtn.style.display = "none";
+      delBtn.style.display = "none";
+    } else {
+      editBtn.style.display = "inline-block";
+      delBtn.style.display = "inline-block";
+    }
+
+    // === Comments Overlay ===
     const toggleBtn = clone.querySelector(".toggle-comments");
     const commentsSection = clone.querySelector(".comments");
     const commentForm = clone.querySelector(".comment-form");
@@ -212,11 +264,22 @@ function renderPosts(list) {
       commentForm.innerHTML = `<p style="color:var(--muted);text-align:center;">🔒 Login to comment.</p>`;
     }
 
+    // Comment toggle with overlay behavior
     toggleBtn.addEventListener("click", () => {
       if (!currentUser) return showToast("Please log in to view comments.", "error");
+
+      // Close other open overlays
+      document.querySelectorAll(".comments.show").forEach(openSection => {
+        if (openSection !== commentsSection) {
+          openSection.classList.remove("show");
+        }
+      });
+
       commentsSection.classList.toggle("show");
+
     });
 
+    // === Load Comments ===
     const commentsQuery = query(collection(db, "posts", p.id, "comments"), orderBy("createdAt", "asc"));
     onSnapshot(commentsQuery, (snapshot) => {
       commentList.innerHTML = "";
@@ -251,6 +314,11 @@ function renderPosts(list) {
           delC.addEventListener("click", async () => {
             if (await customConfirm("Delete this comment?")) {
               await deleteDoc(doc(db, "posts", p.id, "comments", docSnap.id));
+              const statsRef = doc(db, "userStats", currentUser.uid);
+              await updateDoc(statsRef, {
+                xp: increment(-1),
+                activity: increment(-1)
+              }).catch(() => { });
               showToast("Comment deleted.", "info");
             }
           });
@@ -258,10 +326,12 @@ function renderPosts(list) {
 
         commentList.appendChild(commentDiv);
       });
+
       if (!snapshot.size)
         commentList.innerHTML = `<div style="color:var(--muted); font-size:.9rem;">No comments yet</div>`;
     });
 
+    // === Add Comment ===
     commentForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentUser) return showToast("Please log in to comment.", "error");
@@ -274,55 +344,71 @@ function renderPosts(list) {
         uid: currentUser.uid,
         createdAt: serverTimestamp()
       });
+
+      const statsRef = doc(db, "userStats", currentUser.uid);
+      await updateDoc(statsRef, {
+        activity: increment(1),
+        xp: increment(1)
+      }).catch(async (err) => {
+        if (err.code === "not-found") {
+          await setDoc(statsRef, { posts: 0, activity: 1, xp: 1 });
+        }
+      });
+
+
       commentInput.value = "";
       showToast("Comment added!", "success");
     });
 
-    if (currentUser && p.uid === currentUser.uid) {
-      editBtn.style.display = "inline-block";
-      delBtn.style.display = "inline-block";
+    // === Edit/Delete Post ===
+    editBtn.addEventListener("click", async () => {
+      const result = await openEditModal("post", p.title, p.body);
+      if (result) {
+        await updateDoc(doc(db, "posts", p.id), {
+          title: result.newTitle,
+          body: result.newBody
+        });
+        showToast("Post updated!", "success");
+      }
+    });
 
-      editBtn.addEventListener("click", async () => {
-        const result = await openEditModal("post", p.title, p.body);
-        if (result) {
-          await updateDoc(doc(db, "posts", p.id), {
-            title: result.newTitle,
-            body: result.newBody
-          });
-          showToast("Post updated!", "success");
-        }
-      });
+    delBtn.addEventListener("click", async () => {
+      if (await customConfirm("Delete this post and all comments?")) {
 
-      delBtn.addEventListener("click", async () => {
-        if (await customConfirm("Delete this post and all comments?")) {
-          const commentsSnapshot = await getDocs(collection(db, "posts", p.id, "comments"));
-          await Promise.all(
-            commentsSnapshot.docs.map((c) =>
-              deleteDoc(doc(db, "posts", p.id, "comments", c.id))
-            )
-          );
-          await deleteDoc(doc(db, "posts", p.id));
-          showToast("Post deleted.", "info");
-        }
-      });
-    }
+        const commentsSnapshot = await getDocs(collection(db, "posts", p.id, "comments"));
+        const commentCount = commentsSnapshot.size; 
+        const deletePromises = commentsSnapshot.docs.map(c =>
+          deleteDoc(doc(db, "posts", p.id, "comments", c.id))
+        );
+        await Promise.all(deletePromises);
+
+        await deleteDoc(doc(db, "posts", p.id));
+
+        const statsRef = doc(db, "userStats", currentUser.uid);
+        await updateDoc(statsRef, {
+          posts: increment(-1),              
+          activity: increment(-(1 + commentCount)),
+          xp: increment(-commentCount)       
+        });
+
+        showToast(`Post deleted.`, "info");
+      }
+    });
+
+
 
     postsList.appendChild(clone);
   });
 }
 
-   // === Search (client-side) ===
-    document.getElementById("search")?.addEventListener("input", async (e) => {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        const snapshot = await getDocs(collection(db, "posts"));
-        const filtered = snapshot.docs
-            .map((doc) => ({ id: doc.id, ...doc.data() }))
-            .filter((p) =>
-                (p.title + " " + p.body + " " + p.author)
-                    .toLowerCase()
-                    .includes(searchTerm)
-            );
-        renderPosts(filtered);
-    });
-
-    
+// === Search ===
+document.getElementById("search")?.addEventListener("input", async (e) => {
+  const searchTerm = e.target.value.toLowerCase().trim();
+  const snapshot = await getDocs(collection(db, "posts"));
+  const filtered = snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((p) =>
+      (p.title + " " + p.body + " " + p.author).toLowerCase().includes(searchTerm)
+    );
+  renderPosts(filtered);
+});

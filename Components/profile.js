@@ -1,33 +1,56 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { 
-  getAuth, onAuthStateChanged, updateProfile 
+import {
+  getAuth, onAuthStateChanged, updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { 
-  getFirestore, doc, setDoc, getDoc 
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { 
-  getStorage, ref, uploadBytes, getDownloadURL 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
+import{showToast} from"../Components/toast.js";
 import { firebaseConfig } from "../Firebaseconfig/firebasecon.js";
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
+// === UI Elements ===
 const displayNameEl = document.getElementById("displayName");
 const displayEmailEl = document.getElementById("displayEmail");
 const profileAvatar = document.getElementById("profileAvatar");
-const avatarUpload = document.getElementById("avatarUpload");
-const uploadLabel = document.getElementById("uploadLabel");
+const avatarSelectContainer = document.getElementById("avatarSelectContainer");
+const avatarOptions = document.getElementById("avatarOptions");
 const nameInput = document.getElementById("nameInput");
 const editBtn = document.getElementById("editProfileBtn");
 const saveBtn = document.getElementById("saveProfileBtn");
 
 let currentUser;
 
+// === Loader Control ===
+function showLoader() {
+  const loader = document.getElementById("authLoader");
+  if (loader) loader.classList.remove("fade-out");
+}
+
+function hideLoader() {
+  const loader = document.getElementById("authLoader");
+  if (!loader) return;
+  loader.classList.add("fade-out");
+  setTimeout(() => loader.remove(), 600);
+}
+
+// Show loader when the page starts
+showLoader();
+
+// === Auth State Handling ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "../html/login.html";
@@ -35,28 +58,36 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
+  try {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
 
-  const userDoc = await getDoc(doc(db, "users", user.uid));
-  if (userDoc.exists()) {
-    const data = userDoc.data();
-    displayNameEl.textContent = data.displayName || "Adventurer";
-    displayEmailEl.textContent = data.email || "Unknown";
-    if (data.photoURL) profileAvatar.src = data.photoURL;
-  } else {
-    displayNameEl.textContent = user.displayName || "Unknown Adventurer";
-    displayEmailEl.textContent = user.email;
-    if (user.photoURL) profileAvatar.src = user.photoURL;
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      displayNameEl.textContent = data.displayName || "Adventurer";
+      displayEmailEl.textContent = data.email || "Unknown";
+      profileAvatar.src = data.photoURL || "../images/default.png";
+    } else {
+      displayNameEl.textContent = user.displayName || "Unknown Adventurer";
+      displayEmailEl.textContent = user.email;
+      profileAvatar.src = "../images/default.png";
+    }
+
+    enableEditMode();
+    await loadStats(user.uid);
+  } catch (err) {
+    console.error("Error loading profile:", err);
+  } finally {
+    hideLoader(); // ✅ hide after profile info loads
   }
-
-  enableEditMode();
-  await loadStats(user.uid);
 });
 
+
 function enableEditMode() {
-  uploadLabel.hidden = false;
   editBtn.hidden = false;
+  avatarSelectContainer.hidden = false; // show avatar selector
 }
 
+// === Edit Profile Name ===
 editBtn?.addEventListener("click", () => {
   nameInput.hidden = false;
   nameInput.value = displayNameEl.textContent;
@@ -66,72 +97,120 @@ editBtn?.addEventListener("click", () => {
 
 saveBtn?.addEventListener("click", async () => {
   const newName = nameInput.value.trim();
-  if (!newName) return alert("Please enter a valid name.");
+  if (!newName) return showToast("Please enter a valid name.");
+
+  // ✅ Prevent using existing display names of other users
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("displayName", "==", newName));
+  const snapshot = await getDocs(q);
+
+  // If name exists AND it's not the current user's old name
+  if (!snapshot.empty && newName !== displayNameEl.textContent) {
+    showToast(" Display name already taken. Please choose a different name.");
+    return;
+  }
 
   try {
+    // ✅ Update Firebase Auth profile
     await updateProfile(currentUser, { displayName: newName });
-    await setDoc(doc(db, "users", currentUser.uid), {
-      displayName: newName,
-      email: currentUser.email,
-    }, { merge: true });
+
+    // ✅ Update Firestore user document
+    await setDoc(
+      doc(db, "users", currentUser.uid),
+      { displayName: newName, username: newName }, // keep synced
+      { merge: true }
+    );
 
     displayNameEl.textContent = newName;
     nameInput.hidden = true;
     saveBtn.hidden = true;
     editBtn.hidden = false;
 
-    alert("Profile updated successfully!");
+    showToast("✅ Profile name updated successfully!");
   } catch (err) {
     console.error(err);
-    alert("Error updating profile: " + err.message);
+    showToast("Error updating profile: " + err.message);
   }
 });
 
-avatarUpload?.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 2 * 1024 * 1024) {
-    alert("Please upload an image smaller than 2MB.");
-    return;
-  }
 
-  try {
-    const storageRef = ref(storage, `avatars/${currentUser.uid}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
+// === Local Avatar Selection ===
+avatarOptions?.querySelectorAll(".avatar-option").forEach((img) => {
+  img.addEventListener("click", async () => {
+    const selectedAvatar = img.getAttribute("src");
 
-    await updateProfile(currentUser, { photoURL: url });
-    await setDoc(doc(db, "users", currentUser.uid), { photoURL: url }, { merge: true });
+    try {
+      // ✅ Save only in Firestore (not Auth)
+      await setDoc(
+        doc(db, "users", currentUser.uid),
+        { photoURL: selectedAvatar },
+        { merge: true }
+      );
 
-    // 🔥 Update on-page avatar
-    profileAvatar.src = url;
+      // ✅ Update profile immediately
+      profileAvatar.src = selectedAvatar;
 
-    // 🔥 Update dropdown avatar (if present)
-    const dropdownAvatar = document.getElementById("profilePic");
-    if (dropdownAvatar) dropdownAvatar.src = url;
+      // ✅ Update dropdown avatar (if exists)
+      const dropdownAvatar = document.getElementById("profilePic");
+      if (dropdownAvatar) dropdownAvatar.src = selectedAvatar;
 
-    // 🔥 Sync to other open tabs/pages
-    localStorage.setItem("updatedAvatarURL", url);
-    setTimeout(() => localStorage.removeItem("updatedAvatarURL"), 3000);
-
-    alert("Avatar updated successfully!");
-  } catch (err) {
-    console.error(err);
-    alert("Error uploading avatar: " + err.message);
-  }
-});
-
-async function loadStats(uid) {
-  try {
-    const docRef = doc(db, "userStats", uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const stats = docSnap.data();
-      document.getElementById("statPosts").textContent = stats.posts || 0;
-      document.getElementById("statActivity").textContent = stats.activity || 0;
-      document.getElementById("statXP").textContent = stats.xp || 0;
+      showToast("Avatar updated successfully!");
+    } catch (err) {
+      console.error(err);
+      showToast("Error saving avatar: " + err.message);
     }
-  } catch (err) {
-    console.error("Error loading stats:", err);
+  });
+});
+
+
+// displaying profile stats
+async function calculateStats(uid) {
+  // Count posts made by user
+  const postsQuery = query(collection(db, "posts"), where("uid", "==", uid));
+  const postsSnap = await getDocs(postsQuery);
+  const postCount = postsSnap.size;
+
+  // Count comments made by user
+  const commentsQuery = query(collectionGroup(db, "comments"), where("uid", "==", uid));
+  const commentsSnap = await getDocs(commentsQuery);
+  const commentCount = commentsSnap.size;
+
+  const stats = {
+    posts: postCount,
+    activity: postCount + commentCount,
+    xp: commentCount // XP is only from comments (your rule)
+  };
+
+  await setDoc(doc(db, "userStats", uid), stats, { merge: true });
+  return stats;
+}
+
+// Loads stats and keeps UI live-updating
+async function loadStats(uid) {
+  const statsRef = doc(db, "userStats", uid);
+
+  const snap = await getDoc(statsRef);
+
+  if (!snap.exists()) {
+    // Stats do not exist yet → first time → calculate baseline
+    const newStats = await calculateStats(uid);
+    displayStats(newStats);
+  } else {
+    displayStats(snap.data());
   }
+
+  // Real-time updates
+  onSnapshot(statsRef, (docSnap) => {
+    if (docSnap.exists()) displayStats(docSnap.data());
+  });
+}
+
+// Display final stats in UI
+function displayStats(stats) {
+  document.getElementById("statPosts").textContent = stats.posts;
+  document.getElementById("statActivity").textContent = stats.activity;
+  document.getElementById("statXP").textContent = stats.xp;
+
+  // Optional: Show rank + progress bar (see below)
+  displayRank(stats.xp);
 }

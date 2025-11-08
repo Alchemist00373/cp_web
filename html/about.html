@@ -19,45 +19,55 @@
     <!-- Js components -->
     <script defer type="module" src="../Auth/authdrop.js"></script>
     <script type="module" src="../Auth/route.js" defer></script>
+    <script type="module" src="../Components/loader.js"> defer</script>
 
 </head>
 
 
 <body>
+    <!-- Loader -->
+    <div id="authLoader">
+        <div class="loader-wrapper">
+            <div class="spinner"></div>
+            <div class="loader-message">Loading Thousand Shores...</div>
+        </div>
+    </div>
+
     <!-- Header Section -->
     <header class="main-header">
         <nav>
             <div class="background">
-                <!-- Logo -->
                 <div class="logo">
-                    <img src="../images/lg1.jpg" alt="Logo">
+                    <img src="../images/lg1.jpg" alt="Logo" />
                     <span>Thousand Shores</span>
                 </div>
 
-                <!-- Nav Links -->
                 <div class="nav-links">
                     <ul>
-                        <li><a href="../html/home.html">Home</a></li>
-                        <li><a class="active" href="../html/about.html">About</a></li>
-                        <li><a href="../html/forum.html">Forum</a></li>
+                        <li><a href="../html/home.html"><i class="bi bi-house-door"></i> Home</a></li>
+                        <li><a href="../html/about.html" class="active"><i class="bi bi-info-circle"></i> About</a></li>
+                        <li><a href="../html/forum.html"><i class="bi bi-chat-dots"></i> Forum</a></li>
                     </ul>
                 </div>
 
-                <!-- Auth Buttons (before login) -->
+                <!-- Auth Buttons -->
                 <div class="auth-buttons" id="authButtons">
-                    <button onclick="location.href='../html/login.html'">Login</button>
-                    <button onclick="location.href='../html/sign-up.html'">Sign Up</button>
+                    <button onclick="location.href='../html/login.html'">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </button>
+                    <button onclick="location.href='../html/sign-up.html'">
+                        <i class="bi bi-person-plus"></i> Sign Up
+                    </button>
                 </div>
 
                 <!-- Profile Dropdown (after login) -->
                 <div class="profile-dropdown" id="profileDropdown" hidden>
                     <button class="profile-btn" id="profileBtn">
                         <img id="profilePic" alt="Profile" class="avatar">
-                        <!-- <span id="profileName">User</span> -->
                     </button>
                     <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="../html/profile.html">Profile</a>
-                        <button id="logoutBtn">Logout</button>
+                        <a href="../html/profile.html"><i class="bi bi-person-circle"></i> Profile</a>
+                        <button id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</button>
                     </div>
                 </div>
             </div>
@@ -103,9 +113,6 @@
         <div>
             <div class="b">
                 <h2> MEET OUR TEAM</h2>
-                <div>
-                    <p>Meet our Team, the developer of "Thousand Shore". </p>
-                </div>
             </div>
 
             <div class="team-card">
@@ -113,16 +120,15 @@
                     <img src="../images/background-image.gif" alt="Member 1">
                     <h3 class="name">Dean Mark Rei A. Villanueva</h3>
                     <p class="role">Front-End Developer</p>
-                    <p class="desc">"say something short"</p>
+                    <p class="desc">"Time is gold"</p>
 
                     <!-- Social Media Icons -->
                     <div class="social-icons">
-                        <a href="https://www.facebook.com/edmar.john.delacruz" aria-label="Facebook"><i
+                        <a href="https://www.facebook.com/zygote.REI" aria-label="Facebook"><i
                                 class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/edmarjohn22/" aria-label="Instagram"><i
+                        <a href="https://www.instagram.com/xcz_rei/" aria-label="Instagram"><i
                                 class="bi bi-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@edmarjohn22" aria-label="Tiktok"><i
-                                class="bi bi-tiktok"></i></a>
+                        <a href="https://www.tiktok.com/@xczrei" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
                         <h3>Contact Us!</h3>
                     </div>
                 </div>
@@ -135,11 +141,11 @@
 
                     <!-- Social Media Icons -->
                     <div class="social-icons">
-                        <a href="https://www.facebook.com/edmar.john.delacruz" aria-label="Facebook"><i
+                        <a href="https://www.facebook.com/alchemy.0089" aria-label="Facebook"><i
                                 class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/edmarjohn22/" aria-label="Instagram"><i
+                        <a href="https://www.instagram.com/alchemy_26/" aria-label="Instagram"><i
                                 class="bi bi-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@edmarjohn22" aria-label="Tiktok"><i
+                        <a href="https://www.tiktok.com/@simonjaymariano?lang=en" aria-label="Tiktok"><i
                                 class="bi bi-tiktok"></i></a>
                         <h3 class="contact-info">Contact Us!</h3>
                     </div>
@@ -149,16 +155,15 @@
                     <img src="../images/slide2.gif" alt="Member 3">
                     <h3 class="name">Neil Lawrence M. Aquino</h3>
                     <p class="role">UI/UX Designer</p>
-                    <p class="desc">"say something short"</p>
+                    <p class="desc">"Gain, Eat, and Sleep"</p>
 
                     <!-- Social Media Icons -->
                     <div class="social-icons">
-                        <a href="https://www.facebook.com/edmar.john.delacruz" aria-label="Facebook"><i
+                        <a href="https://www.facebook.com/uramixd" aria-label="Facebook"><i
                                 class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/edmarjohn22/" aria-label="Instagram"><i
+                        <a href="https://www.instagram.com/uramiiixd/" aria-label="Instagram"><i
                                 class="bi bi-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@edmarjohn22" aria-label="Tiktok"><i
-                                class="bi bi-tiktok"></i></a>
+                        <a href="https://www.tiktok.com/@yukkii66" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
                         <h3>Contact Us!</h3>
                     </div>
                 </div>
@@ -167,16 +172,15 @@
                     <img src="../images/slide3.gif" alt="Member 5">
                     <h3 class="name">Luke Reed Chard A. Mendoza</h3>
                     <p class="role">Project Manager</p>
-                    <p class="desc">"say something short"</p>
+                    <p class="desc">"Susubo pero hindi susuko!"</p>
 
                     <!-- Social Media Icons -->
                     <div class="social-icons">
-                        <a href="https://www.facebook.com/edmar.john.delacruz" aria-label="Facebook"><i
+                        <a href="https://www.facebook.com/ayeeeLukeee" aria-label="Facebook"><i
                                 class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/edmarjohn22/" aria-label="Instagram"><i
+                        <a href="https://www.instagram.com/lukrid4el/" aria-label="Instagram"><i
                                 class="bi bi-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@edmarjohn22" aria-label="Tiktok"><i
-                                class="bi bi-tiktok"></i></a>
+                        <a href="https://www.tiktok.com/@lukrid" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
                         <h3>Contact Us!</h3>
                     </div>
                 </div>
@@ -194,10 +198,10 @@
             <div class="contact-info">
                 <h3>Contact Us</h3>
                 <a href="">
-                    <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;thousandshoresgmail.com</p>
+                    <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;ThousandShores122gmail.com</p>
                 </a>
                 <a href="">
-                    <p><i class="bi bi-facebook"></i>&nbsp;:&nbsp;&nbsp;thousandshores</p>
+                    <p><i class="bi bi-person-lines-fill"></i>&nbsp;:&nbsp;&nbsp;+63 938 408 8353</p>
                 </a>
             </div>
             <!-- Social Media Links -->
@@ -205,7 +209,6 @@
                 <h3>Follow Us</h3>
                 <div class="social-icons">
                     <a href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="https://x.com/" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
                     <a href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
                     <a href="https://www.tiktok.com/explore" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
                 </div>

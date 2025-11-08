@@ -1,60 +1,74 @@
-
-/* === AUTH LOADER (Thousand Shores modern style) === */
 #authLoader {
   position: fixed;
   inset: 0;
-  background: linear-gradient(145deg, #ffffff, #e8efff);
+  background: radial-gradient(circle at center, #10131a 0%, #0b0d12 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
   opacity: 1;
-  backdrop-filter: blur(5px);
+  visibility: visible;
+  backdrop-filter: blur(8px);
 }
 
 #authLoader.fade-out {
   opacity: 0;
+  visibility: hidden;
 }
 
+/* Loader container */
 .loader-wrapper {
   text-align: center;
   animation: fadeIn 0.7s ease-out;
 }
 
-/* Elegant glowing spinner */
+/* Glowing spinner (dark mode blue) */
 .spinner {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border: 3px solid rgba(60, 80, 140, 0.15);
-  border-top-color: #4662c6;
-  margin: 0 auto 16px;
+  border: 3px solid rgba(150, 160, 255, 0.1);
+  border-top-color: #5e7fff;
+  margin: 0 auto 18px;
   animation: spin 1.1s linear infinite;
-  box-shadow: 0 0 12px rgba(70, 98, 198, 0.25);
+  box-shadow: 0 0 20px rgba(94, 127, 255, 0.25);
 }
 
-/* Clean message text */
+/* Glowing text */
 .loader-message {
-  font-size: 1.1rem;
-  color: #2a2e4b;
+  font-size: 1.15rem;
+  color: #d9e1ff;
   font-family: "Poppins", sans-serif;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
   opacity: 0.9;
+  text-shadow: 0 0 10px rgba(94, 127, 255, 0.4);
   animation: fadeText 1.6s ease-in-out infinite alternate;
 }
 
 /* === Animations === */
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeText {
-  from { opacity: 0.6; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
 }

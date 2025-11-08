@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/footer.css" />
   <link rel="stylesheet" href="../css/csscomponents/forum.css" />
   <link rel="stylesheet" href="../css/csscomponents/loader.css">
-  
+
 
   <!-- JS -->
   <script defer type="module" src="../Auth/authdrop.js"></script>
@@ -24,6 +24,14 @@
 </head>
 
 <body>
+  <!-- Loader -->
+  <div id="authLoader">
+    <div class="loader-wrapper">
+      <div class="spinner"></div>
+      <div class="loader-message">Loading Thousand Shores Forum...</div>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="main-header">
     <nav>
@@ -35,27 +43,30 @@
 
         <div class="nav-links">
           <ul>
-            <li><a href="../html/home.html"">Home</a></li>
-            <li><a href="../html/about.html">About</a></li>
-            <li><a class="active" href="../html/forum.html">Forum</a></li>
+            <li><a href="../html/home.html"><i class="bi bi-house-door"></i> Home</a></li>
+            <li><a href="../html/about.html"><i class="bi bi-info-circle"></i> About</a></li>
+            <li><a href="../html/forum.html" class="active"><i class="bi bi-chat-dots"></i> Forum</a></li>
           </ul>
         </div>
 
         <!-- Auth Buttons -->
         <div class="auth-buttons" id="authButtons">
-          <button onclick="location.href='../html/login.html'">Login</button>
-          <button onclick="location.href='../html/sign-up.html'">Sign Up</button>
+          <button onclick="location.href='../html/login.html'">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </button>
+          <button onclick="location.href='../html/sign-up.html'">
+            <i class="bi bi-person-plus"></i> Sign Up
+          </button>
         </div>
 
-        <!-- Profile Dropdown -->
+        <!-- Profile Dropdown (after login) -->
         <div class="profile-dropdown" id="profileDropdown" hidden>
           <button class="profile-btn" id="profileBtn">
-            <img id="profilePic" alt="Profile" class="avatar" />
-            <!-- <span id="profileName">User</span> -->
+            <img id="profilePic" alt="Profile" class="avatar">
           </button>
           <div class="dropdown-menu" id="dropdownMenu">
-            <a href="../html/profile.html">Profile</a>
-            <button id="logoutBtn">Logout</button>
+            <a href="../html/profile.html"><i class="bi bi-person-circle"></i> Profile</a>
+            <button id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</button>
           </div>
         </div>
       </div>
@@ -63,104 +74,96 @@
   </header>
 
   <!-- Main Forum -->
-  <div class="container">
+  <div>
     <header class="forum-header">
       <h1>Community Forum</h1>
 
       <div class="controls">
-
-        <input id="search" type="search" placeholder="Search posts..." aria-label="Search posts" />
-        <!--  <select id="sortSelect" title="Sort posts">
-          <option value="recent">Most recent</option>
-          <option value="popular">Most popular</option>
-        </select>-->
-
         <button id="newPostToggle" class="btn ghost add-post">Create Discussion</button>
+        <input id="search" type="search" class="input-search" placeholder="Search posts..." aria-label="Search posts" />
       </div>
     </header>
 
-    <!-- New Post Section -->
-    <section id="newPostSection" class="new-post" hidden>
-      <form id="newPostForm">
-        <label for="postTitle">Title</label>
-        <input id="postTitle" name="postTitle" type="text" placeholder="Post title" required class="input-full" />
+    <!-- Forum Container -->
+    <div class="container">
+      <!-- New Post Section -->
+      <section id="newPostSection" class="new-post" hidden>
+        <form id="newPostForm">
+          <label for="postTitle">Title</label>
+          <input id="postTitle" name="postTitle" type="text" placeholder="Post title" required class="input-full" />
 
-        <label for="postBody" class="label-block">Content</label>
-        <textarea id="postBody" name="postBody"
-          placeholder="Share your strategy, ask about history, or post screenshots..."></textarea>
+          <label for="postBody" class="label-block">Content</label>
+          <textarea id="postBody" name="postBody"
+            placeholder="Share your strategy, ask about history, or post screenshots..."></textarea>
 
-        <div class="row form-actions">
-          <button type="button" id="cancelNew" class="btn ghost">Cancel</button>
-          <button type="submit" class="btn">Post</button>
-        </div>
-      </form>
-    </section>
+          <div class="row form-actions">
+            <button type="button" id="cancelNew" class="btn ghost">Cancel</button>
+            <button type="submit" class="btn">Post</button>
+          </div>
+        </form>
+      </section>
 
-    <!-- Posts -->
-    <section id="postsList" class="posts" aria-live="polite"></section>
+      <!-- Posts -->
+      <section id="postsList" class="posts" aria-live="polite"></section>
 
-    <!-- Pagination
-    <nav class="pagination" aria-label="Forum pagination">
-      <button class="pill" id="prevPage">Prev</button>
-      <div class="pill" id="pageInfo">Page 1</div>
-      <button class="pill" id="nextPage">Next</button>
-    </nav> -->
-  </div>
 
-  <!-- Post Template -->
-  <template id="postTemplate">
-    <article class="post-card" role="article" aria-labelledby="post-title">
-      <div>
-        <div class="post-meta">
-          <span class="post-author"></span> • <time class="post-time"></time>
-        </div>
-        <h2 class="post-title" id="post-title"></h2>
-        <p class="post-body"></p>
+    </div>
 
-        <!-- Comments -->
-        <section class="comments" aria-live="polite">
-          <div class="comment-list"></div>
+    <!-- Post Template -->
+    <template id="postTemplate">
+      <article class="post-card" role="article" aria-labelledby="post-title">
+        <div>
+          <div class="post-meta">
+            <span class="post-author"></span> • <time class="post-time"></time>
+          </div>
 
-          <form class="comment-form">
-            <input type="text" class="comment-input" placeholder="Write a comment..." />
-            <button type="submit" class="btn">Comment</button>
-          </form>
+          <div>
+            <h2 class="post-title" id="post-title"></h2>
+            <p class="post-body"></p>
+          </div>
+
+          <div class="post-actions" role="group" aria-label="Post actions">
+            <div>
+              <button class="btn ghost toggle-comments">Comments</button>
+              <button class="btn ghost edit-post" style="display: none">Edit</button>
+              <button class="btn ghost delete-post" style="display: none">Delete</button>
+            </div>
+          </div>
+
+          <!-- Comments -->
+          <section class="comments" aria-live="polite">
+            <div class="comment-list"></div>
+            <form class="comment-form">
+              <input type="text" class="comment-input" placeholder="Write a comment..." />
+              <button type="submit" class="btn">Comment</button>
+            </form>
         </section>
-      </div>
 
-      <div class="post-actions" role="group" aria-label="Post actions">
-        <div>
-          <button class="btn ghost toggle-comments">Comments</button>
-        </div>
-        <div>
-          <button class="btn ghost edit-post" style="display: none">Edit</button>
-          <button class="btn ghost delete-post" style="display: none">Delete</button>
-        </div>
-      </div>
-    </article>
-  </template>
+      </article>
+    </template>
 
+  </div>
   <!-- Footer -->
   <footer>
     <div class="footer-container">
       <div class="contact-info">
         <h3>Contact Us</h3>
         <a href="">
-          <p><i class="bi bi-envelope-at-fill"></i> : thousandshoresgmail.com</p>
+          <p><i class="bi bi-envelope-at-fill"></i>&nbsp;:&nbsp;&nbsp;ThousandShores122gmail.com</p>
         </a>
         <a href="">
-          <p><i class="bi bi-facebook"></i> : thousandshores</p>
+          <p><i class="bi bi-person-lines-fill"></i>&nbsp;:&nbsp;&nbsp;+63 938 408 8353</p>
         </a>
       </div>
-
+      <!-- Social Media Links -->
       <div>
         <h3>Follow Us</h3>
         <div class="social-icons">
           <a href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-          <a href="https://x.com/" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
           <a href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
           <a href="https://www.tiktok.com/explore" aria-label="Tiktok"><i class="bi bi-tiktok"></i></a>
         </div>
+
       </div>
 
       <div>
@@ -206,7 +209,7 @@
       </div>
     </div>
   </div>
-
+  </div>
 
 </body>
 
